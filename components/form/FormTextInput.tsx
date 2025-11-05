@@ -88,6 +88,9 @@ const FormTextInputInner = forwardRef<FormTextInputHandles, FormTextInputProps>(
               minHeight: controlHeight,
               paddingHorizontal: resolvedInputPaddingH,
               fontFamily: t.font?.family?.regular,
+              shadowColor: 'transparent',
+              shadowOpacity: 0,
+              elevation: 0,
             },
             inputStyle,
           ]}
@@ -132,6 +135,7 @@ const FormTextInputInner = forwardRef<FormTextInputHandles, FormTextInputProps>(
               size={22}
               color={t.colors.mutedText}
             />
+            
           </TouchableOpacity>
         )}
 
@@ -176,7 +180,7 @@ const createStyles = (t: ReturnType<typeof useTheme>) =>
     inputWrapperError: { borderColor: t.colors.danger },
     inputWrapperDisabled: { opacity: 0.6 },
     adornment: {
-      paddingHorizontal: t.spacing.sm,
+      paddingLeft: 20,
       justifyContent: 'center',
     },
     input: {

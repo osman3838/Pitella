@@ -24,4 +24,23 @@ export interface AppButtonProps extends PressableProps {
 
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+
+  /** Text overrides */
+  titleColor?: string;
+  titleSize?: number; // AppText size override
+  titleWeight?: 'regular' | 'medium' | 'semiBold' | 'bold';
+  uppercase?: boolean;
+  numberOfLines?: number;  // text truncation
+  align?: 'left' | 'center' | 'right'; // content alignment
+
+  /** Full control: forwarded to AppText */
+  titleProps?: Partial<{
+    size: number;
+    weight: 'regular' | 'medium' | 'semiBold' | 'bold';
+    color: string;
+    align: 'left' | 'center' | 'right';
+    numberOfLines: number;
+    letterSpacing: number;
+    lineHeight: number;
+  }>;
 }

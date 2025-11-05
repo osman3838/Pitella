@@ -35,9 +35,7 @@ export default function AuthLayout() {
         {/* Ekran dosyalarınız: app/(auth)/login.tsx, register.tsx, forgot-password.tsx, verify-code.tsx, reset-password.tsx */}
         <Stack.Screen name="login" />
         <Stack.Screen name="register" />
-        <Stack.Screen name="forgot-password" />
-        <Stack.Screen name="verify-code" />
-        <Stack.Screen name="reset-password" />
+  
       </Stack>
     </>
   );

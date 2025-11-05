@@ -1,18 +1,20 @@
 import { FormTextInput } from '@/components/form/FormTextInput';
 import { AppButton } from '@/components/ui/AppButton';
 import { AppText } from '@/components/ui/AppText';
+import { IconButton } from '@/components/ui/IconButton';
 import { useTheme } from '@/hooks/useTheme';
+import Icon from '@/icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Link, useRouter } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    View,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 
 const { height } = Dimensions.get('window');
@@ -98,7 +100,17 @@ export default function Login() {
               }
               error={touched.id ? errors.id : undefined}
               touched={touched.id}
-              containerStyle={{ borderRadius: 999 }}
+              inputStyle={{
+                shadowOpacity:0,
+                outline:"none",
+                backgroundColor:"transparent",
+                paddingVertical:17,
+                borderColor:"transparent",
+                borderWidth:0,
+              }}
+              containerStyle={{ borderRadius: 99, boxShadow:"none",                paddingVertical:10,
+}}
+
             />
           </View>
 
@@ -116,6 +128,14 @@ export default function Login() {
             }
             error={touched.password ? errors.password : undefined}
             touched={touched.password}
+            inputStyle={{
+              boxShadow:"none",
+              outline:"none",
+              backgroundColor:"transparent",
+              paddingVertical:17,
+              borderColor:"transparent",
+              borderWidth:0,
+            }}
           />
 
           <View style={s.forgotRow}>
@@ -124,7 +144,9 @@ export default function Login() {
                 weight="regular"
                 size={14}
                 color={t.colors.mutedText}
-                style={{ textDecorationLine: 'underline' }}
+                
+                style={{ textDecorationLine: 'none' }}
+
               >
                 Şifremi Unuttum
               </AppText>
@@ -132,14 +154,16 @@ export default function Login() {
           </View>
 
           {/* Primary button */}
-          <AppButton
-            title={loading ? 'Gönderiliyor...' : 'Giriş Yap'}
-            onPress={onSubmit}
-            loading={loading}
-            block
-            round
-            style={{ marginTop: t.spacing.lg }}
-          />
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+       <AppButton title="Giriş Yap"   titleProps={{ size: 25, weight: 'bold', letterSpacing: 0.3, lineHeight: 24}}  style={{ width: '60%',borderRadius:30 }}>
+        <AppText
+        size={23}
+        color='white'
+        weight='bold'
+        >Giriş Yap</AppText>
+       </AppButton>
+</View>
+
 
           <View style={s.otherTitleWrap}>
             <AppText weight="regular" size={14} color={t.colors.mutedText}>
@@ -148,22 +172,26 @@ export default function Login() {
           </View>
 
           {/* Social buttons */}
-          <View style={s.socialRow}>
-            <AppButton
-              variant="outline"
-              size="md"
-              title="Google"
-              leftIcon={<Ionicons name="logo-google" size={20} color={t.colors.text} />}
-              style={{ minWidth: 140 }}
-            />
-            <AppButton
-              variant="outline"
-              size="md"
-              title="Apple"
-              leftIcon={<Ionicons name="logo-apple" size={22} color={t.colors.text} />}
-              style={{ minWidth: 140 }}
-            />
-          </View>
+       <View style={s.socialRow}>
+  <IconButton
+  style={{ borderRadius:4,paddingHorizontal:30}}
+    onPress={() => console.log('Google login')}
+    backgroundColor="#fff"
+  >
+    <Icon name="Google" size={30} />
+  </IconButton>
+
+<IconButton
+  style={{ borderRadius:4,paddingHorizontal:30}}
+    backgroundColor="#fff"
+  >
+    <Icon name="Apple" size={36} />
+  </IconButton>
+
+
+
+</View>
+
 
           <View style={s.registerRow}>
             <AppText weight="regular" size={14} color={t.colors.mutedText}>
@@ -197,8 +225,8 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
       gap: 6,
     },
     heroImg: {
-      width: 210,
-      height: 210,
+      width: 250,
+      height: 250,
     },
     card: {
       marginTop: -t.radius * 2,
