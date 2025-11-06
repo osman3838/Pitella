@@ -1,54 +1,88 @@
-import { FormTextInput } from '@/components/form/FormTextInput';
-import { AppButton } from '@/components/ui/AppButton';
-import { AppText } from '@/components/ui/AppText';
-import { IconButton } from '@/components/ui/IconButton';
-import { useTheme } from '@/hooks/useTheme';
-import Icon from '@/icons';
+// app/(auth)/login.tsx
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Link, useRouter } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import { Link } from 'expo-router';
+import React, { useRef } from 'react';
+import { Controller, FormProvider } from 'react-hook-form';
 import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
+  TextInput,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
+
+import { FormTextInput } from '@/components/form/FormTextInput';
+import { AppButton } from '@/components/ui/AppButton';
+import { AppText } from '@/components/ui/AppText';
+import { IconButton } from '@/components/ui/IconButton';
+import { useTheme } from '@/hooks/useTheme';
+import Icon from '@/icons';
+
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { useInvalidSubmit } from '@/hooks/useInvalidSubmit';
+import { useZodForm } from '@/hooks/useZodForm';
+
+import { useLoginMutation } from '@/redux/api/auth.api';
+import { LoginForm, loginSchema } from '@/validation/schemas/login.schema';
 
 const { height } = Dimensions.get('window');
 
 export default function Login() {
   const t = useTheme();
   const s = useStyles(t);
-  const router = useRouter();
-  const passRef = useRef<any>(null);
 
-  const [values, setValues] = useState({ id: '', password: '' });
-  const [touched, setTouched] = useState({ id: false, password: false });
-  const [errors, setErrors] = useState<{ id?: string; password?: string }>({});
-  const [loading, setLoading] = useState(false);
+  const [loginReq, { isLoading }] = useLoginMutation();
 
-  const validate = () => {
-    const e: typeof errors = {};
-    if (!values.id) e.id = 'Bu alan zorunlu';
-    if (!values.password) e.password = 'Bu alan zorunlu';
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
+  const form = useZodForm<LoginForm>(loginSchema, {
+    defaultValues: {
+      email_or_phone: '',
+      password: '',
+    },
+    mode: 'onChange',
+  });
 
-  const onSubmit = async () => {
-    if (loading) return;
-    setTouched({ id: true, password: true });
-    if (!validate()) return;
+  const {
+    formState: { errors, isValid, isSubmitting },
+    clearErrors,
+  } = form;
+
+  // Focus zinciri
+  const passwordRef = useRef<TextInput>(null);
+  const invalid = useInvalidSubmit<LoginForm>();
+
+  const onInvalid = () =>
+    invalid(errors, {
+      password: passwordRef.current,
+    });
+""
+  const onValid = async (data: LoginForm) => {
+    clearErrors();
     try {
-      setLoading(true);
-      router.replace('/(app)');
-    } finally {
-      setLoading(false);
+      await loginReq({
+        email_or_phone: data.email_or_phone.trim(),
+        password: data.password,
+      }).unwrap();
+
+      Toast.show({ type: 'success', text1: 'Giriş başarılı', position: 'top' });
+    } catch (e: any) {
+      const status = e?.status ?? 0;
+      const message = e?.message || 'Giriş başarısız';
+      Toast.show({
+        type: 'error',
+        text1: status ? `${status}` : 'Hata',
+        text2: String(message),
+        position: 'top',
+      });
+      onInvalid();
     }
   };
+
+  const { submit } = useFormSubmit(form, { onValid, onInvalid });
 
   return (
     <KeyboardAvoidingView
@@ -60,7 +94,7 @@ export default function Login() {
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Header */}
+        {/* HEADER */}
         <View style={s.header}>
           <View style={s.headerInner}>
             <Image
@@ -75,124 +109,137 @@ export default function Login() {
                 {' '}ile
               </AppText>
             </View>
-            <AppText weight="book" size={18} color="#fff" align="center" style={{ lineHeight: 16 }}>
+
+            <AppText weight="bold" size={18} color="#fff" align="center" style={{ lineHeight: 16 }}>
               fırsatları <AppText color={t.colors.gold}>keşfet!</AppText>
             </AppText>
+
             <View style={{ marginTop: t.spacing.lg }} />
           </View>
         </View>
 
-        {/* Card */}
+        {/* CARD */}
         <View style={s.card}>
           <AppText weight="bold" size={24} color={t.colors.text} style={s.title}>
             Giriş Yap
           </AppText>
 
-          <View style={{ marginTop: t.spacing.lg }}>
-            <FormTextInput
-              placeholder="Email yada Telefon"
-              value={values.id}
-              onChangeText={(txt) => setValues((sv) => ({ ...sv, id: txt }))}
-              returnKeyType="next"
-              onSubmitEditing={() => passRef.current?.focus()}
-              leftAdornment={
-                <Ionicons name="person-circle-outline" size={22} color={t.colors.mutedText} />
-              }
-              error={touched.id ? errors.id : undefined}
-              touched={touched.id}
-              inputStyle={{
-                shadowOpacity:0,
-                outline:"none",
-                backgroundColor:"transparent",
-                paddingVertical:17,
-                borderColor:"transparent",
-                borderWidth:0,
-              }}
-              containerStyle={{ borderRadius: 99, boxShadow:"none",                paddingVertical:10,
-}}
+          <FormProvider {...form}>
+            <View style={{ marginTop: t.spacing.lg, gap: 12 }}>
+              {/* Email/Phone */}
+              <Controller
+                control={form.control}
+                name="email_or_phone"
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <>
+                    <FormTextInput
+                      placeholder="E-posta ya da Telefon"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      returnKeyType="next"
+                      autoCapitalize="none"
+                      containerStyle={{ borderRadius: 99 }}
+                      leftAdornment={
+                        <Ionicons
+                          name="person-circle-outline"
+                          size={22}
+                          color={t.colors.mutedText}
+                        />
+                      }
+                      onSubmitEditing={() => passwordRef.current?.focus()}
+                    />
+                    {errors.email_or_phone && (
+                      <Text style={[s.err, { color: t.colors.danger }]}>
+                        {errors.email_or_phone.message}
+                      </Text>
+                    )}
+                  </>
+                )}
+              />
 
-            />
-          </View>
+              {/* Password */}
+              <Controller
+                control={form.control}
+                name="password"
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <>
+                    <FormTextInput
+                      ref={passwordRef}
+                      placeholder="Parola"
+                      secureTextEntry
+                      enablePasswordToggle
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      returnKeyType="go"
+                      containerStyle={{ borderRadius: 99 }}
+                      leftAdornment={
+                        <Ionicons
+                          name="lock-closed-outline"
+                          size={22}
+                          color={t.colors.mutedText}
+                        />
+                      }
+                      onSubmitEditing={submit}
+                    />
+                    {errors.password && (
+                      <Text style={[s.err, { color: t.colors.danger }]}>
+                        {errors.password.message}
+                      </Text>
+                    )}
+                  </>
+                )}
+              />
+            </View>
+          </FormProvider>
 
-          <FormTextInput
-            placeholder="Parola"
-            containerStyle={{ borderRadius: 999 }}
-            value={values.password}
-            onChangeText={(txt) => setValues((sv) => ({ ...sv, password: txt }))}
-            secureTextEntry
-            enablePasswordToggle
-            returnKeyType="go"
-            onSubmitEditing={onSubmit}
-            leftAdornment={
-              <Ionicons name="lock-closed-outline" size={22} color={t.colors.mutedText} />
-            }
-            error={touched.password ? errors.password : undefined}
-            touched={touched.password}
-            inputStyle={{
-              boxShadow:"none",
-              outline:"none",
-              backgroundColor:"transparent",
-              paddingVertical:17,
-              borderColor:"transparent",
-              borderWidth:0,
-            }}
-          />
-
+          {/* Forgot password */}
           <View style={s.forgotRow}>
-            <Link href="/(auth)/forgot-password" asChild>
+            <Link href="/(auth)/forgot" asChild>
               <AppText
                 weight="regular"
                 size={14}
                 color={t.colors.mutedText}
-                
                 style={{ textDecorationLine: 'none' }}
-
               >
                 Şifremi Unuttum
               </AppText>
             </Link>
           </View>
 
-          {/* Primary button */}
+          {/* Button */}
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-       <AppButton title="Giriş Yap"   titleProps={{ size: 25, weight: 'bold', letterSpacing: 0.3, lineHeight: 24}}  style={{ width: '60%',borderRadius:30 }}>
-        <AppText
-        size={23}
-        color='white'
-        weight='bold'
-        >Giriş Yap</AppText>
-       </AppButton>
-</View>
+            <AppButton
+              block
+              round
+              variant="secondary"
+              style={{ width: '60%', borderRadius: 30 }}
+              onPress={submit}
+              loading={isLoading}
+            >
+              <AppText size={20} weight="bold" color="#fff">Giriş Yap</AppText>
+            </AppButton>
+          </View>
 
-
+          {/* Social */}
           <View style={s.otherTitleWrap}>
             <AppText weight="regular" size={14} color={t.colors.mutedText}>
               Diğer giriş seçenekleri
             </AppText>
           </View>
 
-          {/* Social buttons */}
-       <View style={s.socialRow}>
-  <IconButton
-  style={{ borderRadius:4,paddingHorizontal:30}}
-    onPress={() => console.log('Google login')}
-    backgroundColor="#fff"
-  >
-    <Icon name="Google" size={30} />
-  </IconButton>
+          <View style={s.socialRow}>
+            <IconButton style={{ borderRadius: 4, paddingHorizontal: 30 }} backgroundColor="#fff">
+              <Icon name="Google" size={30} />
+            </IconButton>
 
-<IconButton
-  style={{ borderRadius:4,paddingHorizontal:30}}
-    backgroundColor="#fff"
-  >
-    <Icon name="Apple" size={36} />
-  </IconButton>
+            <IconButton style={{ borderRadius: 4, paddingHorizontal: 30 }} backgroundColor="#fff">
+              <Icon name="Apple" size={36} />
+            </IconButton>
+          </View>
 
-
-
-</View>
-
-
+          {/* Register */}
           <View style={s.registerRow}>
             <AppText weight="regular" size={14} color={t.colors.mutedText}>
               Hesabın yok mu?{' '}
@@ -216,7 +263,6 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
       alignItems: 'center',
       justifyContent: 'center',
       paddingTop: t.spacing.lg,
-      
       paddingBottom: t.spacing.xl,
     },
     headerInner: {
@@ -260,4 +306,5 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
       justifyContent: 'center',
       marginTop: t.spacing.xl,
     },
+    err: { marginTop: 4, fontSize: 12 },
   });

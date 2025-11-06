@@ -5,7 +5,6 @@ import React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -36,16 +35,14 @@ export default function ScreenContainer({
   const router = useRouter();
 
   return (
-    <SafeAreaView style={[s.safe, { backgroundColor: colors.primaryDark }]} testID={testID}>
+    <View style={[s.safe, { backgroundColor: colors.primaryDark }]} testID={testID}>
       <StatusBar barStyle="light-content" />
 
-      {/* Üst lacivert alan */}
       <View style={[s.header, { backgroundColor: colors.primaryDark,display:'flex',justifyContent:'center',alignItems:'center' }]}>
         {header}
         <AppText color='white' align='center'  size={25} weight='bold' >Soupana</AppText>
       </View>
 
-      {/* Sheet (kaydırılabilir alan) */}
       <View style={[s.sheet, { backgroundColor: colors.surface }]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -68,7 +65,7 @@ export default function ScreenContainer({
       </View>
 
 
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -87,7 +84,7 @@ const s = StyleSheet.create({
   },
   content: {
     paddingTop: 8,
-    flexGrow: 1, // Scroll aktif hale gelir
+    flexGrow: 1,
   },
   footer: { marginTop: 16 },
   ctaWrap: {

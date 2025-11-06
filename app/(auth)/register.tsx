@@ -1,39 +1,120 @@
+import { Ionicons } from '@expo/vector-icons';
+import React, { useRef } from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+
 import { FormTextInput } from '@/components/form/FormTextInput';
 import AuthLayout from '@/components/layout/AuthLayout';
 import { AppButton } from '@/components/ui/AppButton';
 import { AppText } from '@/components/ui/AppText';
+import { ConsentItem } from '@/components/ui/ConsentItem';
+
 import { useTheme } from '@/hooks/useTheme';
+import { useRegisterMutation } from '@/redux/api/auth.api';
 import { Link, router } from 'expo-router';
-import React, { useRef, useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+
+import { RegisterForm, registerSchema } from '@/validation/schemas';
+import { Controller } from 'react-hook-form';
+import Toast from 'react-native-toast-message';
+
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { useZodForm } from '@/hooks/useZodForm';
+import { applyServerErrors, focusFirstError } from '@/utils/forms/errors';
+import type { ServerErrors } from '@/utils/forms/types';
 
 export default function Register() {
   const { colors } = useTheme();
-  const [values, setValues] = useState({
-    name: '',
-    surname: '',
-    email: '',
-    password: '',
-    confirm: '',
-  });
+  const [registerReq, { isLoading }] = useRegisterMutation();
 
+  // Refs ilk hataya atlamak için
   const surnameRef = useRef<TextInput>(null);
+  const phoneRef = useRef<TextInput>(null);
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const confirmRef = useRef<TextInput>(null);
 
-  const handleChange = (key: keyof typeof values, val: string) =>
-    setValues((prev) => ({ ...prev, [key]: val }));
+  // RHF + Zod
+  const form = useZodForm<RegisterForm>(registerSchema, {
+    defaultValues: {
+      name: '',
+      surname: '',
+      phone: '',
+      email: '',
+      password: '',
+      confirm: '',
+      invite_code: '',
+      kvkk: false,
+      contract: false,
+    },
+  });
 
-  const handleRegister = () => {
-    // TODO: backend API call veya validation buraya
-    router.replace('/(tabs)');
+  const {
+    control,
+    setValue,
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors, isValid, isSubmitting },
+  } = form;
+
+  const kvkk = watch('kvkk');
+  const contract = watch('contract');
+
+  // Backend hata yayma
+  const onInvalid = () => {
+    Toast.show({ type: 'error', text1: 'Formu kontrol et', text2: 'Eksik veya hatalı alanlar var.', position: 'top' });
+    focusFirstError<RegisterForm>(errors, {
+      surname: surnameRef.current,
+      phone:   phoneRef.current,
+      email:   emailRef.current,
+      password: passwordRef.current,
+      confirm:  confirmRef.current,
+      // name için submitEditing ile ilerliyoruz, ayrıca ref’e gerek yok
+    });
   };
+
+  const onValid = async (data: RegisterForm) => {
+    clearErrors();
+    try {
+      await registerReq({
+        name: data.name.trim(),
+        surname: data.surname.trim(),
+        phone: data.phone || undefined,
+        email: data.email,
+        password: data.password,
+        invite_code: data.invite_code?.trim() || undefined,
+      }).unwrap();
+
+      Toast.show({ type: 'success', text1: 'Kayıt başarılı', position: 'top' });
+      router.replace('/(auth)/login');
+    } catch (e: any) {
+      const status = e?.status ?? 0;
+      const raw = e?.raw ?? e?.data;
+      const message = e?.message || 'Kayıt başarısız';
+
+      const possibleErrors: ServerErrors =
+        raw?.errors || raw?.detail || raw?.error || raw?.message;
+
+      applyServerErrors<RegisterForm>(possibleErrors, setError);
+
+      Toast.show({
+        type: 'error',
+        text1: status ? `${status}` : 'Hata',
+        text2: String(message),
+        position: 'top',
+      });
+
+      onInvalid();
+    }
+  };
+
+  // Ortak submit sarmalayıcı
+  const { submit } = useFormSubmit(form, { onValid, onInvalid });
+
 
   return (
     <AuthLayout
       title="Kayıt Ol"
-      cta={<AppButton title="Kayıt Ol" onPress={handleRegister} />}
+      cta={null}
       footer={
         <AppText align="center" color={colors.icon}>
           Zaten hesabın var mı?{' '}
@@ -44,74 +125,198 @@ export default function Register() {
       }
     >
       <View style={{ gap: 12 }}>
-        <FormTextInput
-          placeholder="Ad"
-          containerStyle={{ borderRadius: 99 }}
-          
-          value={values.name}
-          onChangeText={(v) => handleChange('name', v)}
-          returnKeyType="next"
-          onSubmitEditing={() => surnameRef.current?.focus()}
-          
+        {/* Ad */}
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <>
+              <FormTextInput
+                placeholder="Ad"
+                containerStyle={{ borderRadius: 99 }}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                returnKeyType="next"
+                onSubmitEditing={() => surnameRef.current?.focus()}
+                leftAdornment={<Ionicons name="person-outline" size={20} color={colors.mutedText} />}
+              />
+              {errors.name && <Text style={[s.err, { color: colors.danger }]}>{errors.name.message}</Text>}
+            </>
+          )}
         />
 
-        <FormTextInput
-          ref={surnameRef}
-          placeholder="Soyad"
-          containerStyle={{ borderRadius: 99 }}
-          value={values.surname}
-          onChangeText={(v) => handleChange('surname', v)}
-          returnKeyType="next"
-          onSubmitEditing={() => emailRef.current?.focus()}
+        {/* Soyad */}
+        <Controller
+          control={control}
+          name="surname"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <>
+              <FormTextInput
+                ref={surnameRef}
+                placeholder="Soyad"
+                containerStyle={{ borderRadius: 99 }}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                returnKeyType="next"
+                onSubmitEditing={() => phoneRef.current?.focus()}
+                leftAdornment={<Ionicons name="person-outline" size={20} color={colors.mutedText} />}
+              />
+              {errors.surname && <Text style={[s.err, { color: colors.danger }]}>{errors.surname.message}</Text>}
+            </>
+          )}
         />
 
-        <FormTextInput
-          ref={emailRef}
-          placeholder="E-posta"
-          containerStyle={{ borderRadius: 99 }}
-          value={values.email}
-          onChangeText={(v) => handleChange('email', v)}
-          keyboardType="email-address"
-          returnKeyType="next"
-          onSubmitEditing={() => passwordRef.current?.focus()}
+        {/* Telefon (opsiyonel) */}
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <>
+              <FormTextInput
+                ref={phoneRef}
+                placeholder="Telefon (opsiyonel)"
+                containerStyle={{ borderRadius: 99 }}
+                keyboardType="phone-pad"
+                value={value ?? ''}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                returnKeyType="next"
+                onSubmitEditing={() => emailRef.current?.focus()}
+                leftAdornment={<Ionicons name="call-outline" size={20} color={colors.mutedText} />}
+              />
+              {errors.phone && <Text style={[s.err, { color: colors.danger }]}>{errors.phone.message}</Text>}
+            </>
+          )}
         />
 
-        <FormTextInput
-          ref={passwordRef}
-          placeholder="Parola"
-          value={values.password}
-          containerStyle={{ borderRadius: 99 }}
-          onChangeText={(v) => handleChange('password', v)}
-          secureTextEntry
-          returnKeyType="next"
-          onSubmitEditing={() => confirmRef.current?.focus()}
+        {/* E-posta */}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <>
+              <FormTextInput
+                ref={emailRef}
+                placeholder="E-posta"
+                containerStyle={{ borderRadius: 99 }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
+                leftAdornment={<Ionicons name="mail-outline" size={20} color={colors.mutedText} />}
+              />
+              {errors.email && <Text style={[s.err, { color: colors.danger }]}>{errors.email.message}</Text>}
+            </>
+          )}
         />
 
-        <FormTextInput
-          ref={confirmRef}
-          placeholder="Parola Tekrar"
-          containerStyle={{ borderRadius: 99 }}
-          value={values.confirm}
-          onChangeText={(v) => handleChange('confirm', v)}
-          secureTextEntry
-          returnKeyType="done"
-          onSubmitEditing={handleRegister}
+        {/* Parola */}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <>
+              <FormTextInput
+                ref={passwordRef}
+                placeholder="Parola"
+                containerStyle={{ borderRadius: 99 }}
+                secureTextEntry
+                enablePasswordToggle
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                returnKeyType="next"
+                onSubmitEditing={() => confirmRef.current?.focus()}
+                leftAdornment={<Ionicons name="lock-closed-outline" size={20} color={colors.mutedText} />}
+              />
+              {errors.password && <Text style={[s.err, { color: colors.danger }]}>{errors.password.message}</Text>}
+            </>
+          )}
         />
-        <AppButton variant='secondary' round   onPress={handleRegister} >
-                  <AppText
-                  size={23}
-                  color='white'
-                  weight='bold'
-                  >Kayıt Ol</AppText>
-                 </AppButton> 
-      </View> 
+
+        {/* Parola tekrar */}
+        <Controller
+          control={control}
+          name="confirm"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <>
+              <FormTextInput
+                ref={confirmRef}
+                placeholder="Parola tekrar"
+                containerStyle={{ borderRadius: 99 }}
+                secureTextEntry
+                enablePasswordToggle
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                returnKeyType="done"
+                onSubmitEditing={submit}
+                leftAdornment={<Ionicons name="lock-closed-outline" size={20} color={colors.mutedText} />}
+              />
+              {errors.confirm && <Text style={[s.err, { color: colors.danger }]}>{errors.confirm.message}</Text>}
+            </>
+          )}
+        />
+
+        {/* Davet kodu (ops.) */}
+        <Controller
+          control={control}
+          name="invite_code"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <FormTextInput
+              placeholder="Davet Kodu (opsiyonel)"
+              containerStyle={{ borderRadius: 99 }}
+              value={value ?? ''}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              autoCapitalize="characters"
+              leftAdornment={<Ionicons name="qr-code-outline" size={20} color={colors.mutedText} />}
+            />
+          )}
+        />
+
+        {/* KVKK / Sözleşme */}
+        <ConsentItem
+          checked={kvkk}
+          onChange={v => setValue('kvkk', v, { shouldValidate: true })}
+          text="Aydınlatma metnini okudum."
+          actionText="Aydınlatma Metni"
+          onActionPress={() => {}}
+        />
+        {errors.kvkk && <Text style={[s.err, { color: colors.danger }]}>{String(errors.kvkk.message)}</Text>}
+
+        <ConsentItem
+          checked={contract}
+          onChange={v => setValue('contract', v, { shouldValidate: true })}
+          title="Kullanıcı Sözleşmesi"
+          text="Sözleşmeyi okudum ve kabul ediyorum."
+        />
+        {errors.contract && <Text style={[s.err, { color: colors.danger }]}>{String(errors.contract.message)}</Text>}
+
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                   <AppButton
+                     block
+                     round
+                     align='center'
+                     variant="secondary"
+                     style={{ width: '60%', borderRadius: 30 }}
+                     onPress={submit}
+                     loading={isLoading}
+                   >
+                     <AppText size={20} align='left' weight="bold" color="#fff">Kayıt Ol</AppText>
+                   </AppButton>
+                 </View>
+       
+      </View>
     </AuthLayout>
   );
 }
 
 const s = StyleSheet.create({
-  link: {
-    textAlign: 'center',
-    fontSize: 14,
-  },
+  err: { marginTop: 4, fontSize: 12 },
 });

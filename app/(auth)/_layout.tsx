@@ -14,8 +14,7 @@ export default function AuthLayout() {
 
   return (
     <>
-      {/* Lacivert üst alanlarınızda metinler beyaz, status bar da öyle olsun */}
-
+    
       <Stack
         initialRouteName="login"
         screenOptions={{
@@ -26,16 +25,15 @@ export default function AuthLayout() {
             default: 'fade',
           }),
           presentation: 'card',
-          // Auth ekranlarının genel zeminini burada kontrol edebilirsiniz
           contentStyle: {
-            backgroundColor: t.colors.background, // kart zemini için açık gri kullanıyorsanız surface de verebilirsiniz
+            backgroundColor: t.colors.background, 
           },
         }}
       >
-        {/* Ekran dosyalarınız: app/(auth)/login.tsx, register.tsx, forgot-password.tsx, verify-code.tsx, reset-password.tsx */}
         <Stack.Screen name="login" />
         <Stack.Screen name="register" />
-  
+        <Stack.Screen name="forgot" />
+        <Stack.Screen name="forgot-code" />
       </Stack>
     </>
   );

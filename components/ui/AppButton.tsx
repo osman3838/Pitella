@@ -95,7 +95,6 @@ export const AppButton = memo((props: Props) => {
         {
           backgroundColor,
           borderColor,
-          opacity: disabled ? 0.6 : dimOnPress && pressed ? 0.9 : 1,
           paddingHorizontal: contentPaddingH,
           paddingVertical: contentPaddingV,
           justifyContent:
