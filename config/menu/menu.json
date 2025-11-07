@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "tabs": [
+    {
+      "id": "home",
+      "route": "Home",
+      "icon": "Home",
+      "label": "Ev",
+      "center": false,
+      "visible": true
+    },
+    {
+      "id": "campaigns",
+      "route": "Campaigns",
+      "icon": "Campains",
+      "label": "Kampanyalar",
+      "center": false,
+      "visible_if": {
+        "flag": "show_campaigns"
+      }
+    },
+    {
+      "id": "pay",
+      "route": "Pay",
+      "icon": "Barcode",
+      "label": "Öde",
+      "center": true,
+      "visible": true
+    },
+    
+    {
+      "id": "locations",
+      "route": "Locations",
+      "icon": "Location",
+      "label": "Otomatlar",
+      "center": false,
+      "visible": true
+    },
+    {
+      "id": "profile",
+      "route": "Profile",
+      "icon": "Profile",
+      "label": "Hesabım",
+      "center": false,
+      "visible_if": {
+        "auth": true
+      }
+    }
+  ],
+  "feature_flags": {
+    "show_campaigns": true
+  }
+}

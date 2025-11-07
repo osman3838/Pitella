@@ -125,7 +125,6 @@ export default function Register() {
       }
     >
       <View style={{ gap: 12 }}>
-        {/* Ad */}
         <Controller
           control={control}
           name="name"
@@ -146,7 +145,6 @@ export default function Register() {
           )}
         />
 
-        {/* Soyad */}
         <Controller
           control={control}
           name="surname"
@@ -168,7 +166,6 @@ export default function Register() {
           )}
         />
 
-        {/* Telefon (opsiyonel) */}
         <Controller
           control={control}
           name="phone"
@@ -191,7 +188,6 @@ export default function Register() {
           )}
         />
 
-        {/* E-posta */}
         <Controller
           control={control}
           name="email"
@@ -215,7 +211,6 @@ export default function Register() {
           )}
         />
 
-        {/* Parola */}
         <Controller
           control={control}
           name="password"
@@ -239,7 +234,6 @@ export default function Register() {
           )}
         />
 
-        {/* Parola tekrar */}
         <Controller
           control={control}
           name="confirm"
@@ -263,7 +257,6 @@ export default function Register() {
           )}
         />
 
-        {/* Davet kodu (ops.) */}
         <Controller
           control={control}
           name="invite_code"
@@ -280,7 +273,6 @@ export default function Register() {
           )}
         />
 
-        {/* KVKK / Sözleşme */}
         <ConsentItem
           checked={kvkk}
           onChange={v => setValue('kvkk', v, { shouldValidate: true })}

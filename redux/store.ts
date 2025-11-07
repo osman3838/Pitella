@@ -1,16 +1,19 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, Middleware } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import {
   FLUSH,
-  PAUSE, PERSIST,
-  persistReducer, persistStore,
-  PURGE, REGISTER,
-  REHYDRATE
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
 } from 'redux-persist';
 
 import { authApi } from '@/redux/api/auth.api';
-import sessionReducer from '@/redux/slices/session.slice';
+import sessionReducer, { signOut } from '@/redux/slices/session.slice';
+import { SecureStorage } from '@/storage/securePersist';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
@@ -19,12 +22,21 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
   key: 'root',
-  storage: AsyncStorage,
+  storage: SecureStorage,
   whitelist: ['session'],
   blacklist: [authApi.reducerPath],
+  timeout: 0,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const hygiene: Middleware = (api) => (next) => (action) => {
+  const result = next(action);
+  if (action.type === signOut.type || action.type === PURGE) {
+    api.dispatch(authApi.util.resetApiState());
+  }
+  return result;
+};
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -33,7 +45,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(authApi.middleware),
+    }).concat(authApi.middleware, hygiene),
   devTools: __DEV__,
 });
 

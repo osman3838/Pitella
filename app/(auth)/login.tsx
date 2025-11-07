@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import React, { useRef } from 'react';
+import { Alert } from 'react-native';
 import { Controller, FormProvider } from 'react-hook-form';
 import {
   Dimensions,
@@ -29,15 +30,19 @@ import { useZodForm } from '@/hooks/useZodForm';
 
 import { useLoginMutation } from '@/redux/api/auth.api';
 import { LoginForm, loginSchema } from '@/validation/schemas/login.schema';
+import { useAppSelector } from '@/redux/hooks';
 
 const { height } = Dimensions.get('window');
 
 export default function Login() {
   const t = useTheme();
   const s = useStyles(t);
+  const token = useAppSelector((s) => s.session);
+  console.log(token);
+
 
   const [loginReq, { isLoading }] = useLoginMutation();
-
+  
   const form = useZodForm<LoginForm>(loginSchema, {
     defaultValues: {
       email_or_phone: '',
