@@ -19,6 +19,8 @@ export * from './ui/checkboxTypes';
 export * from './ui/iconButtonTypes';
 export * from './ui/textTypes';
 export * from './ui/otpTypes';
+export * from './ui/avatarTypes';
+
 
 /*************************************************
  * ICON TIPLERI
@@ -62,6 +64,19 @@ export * from './dto/auth';
 
 
 export * from './navigation/MenuTab';
+export * from './navigation/app-header';
+
+
 export * from './navigation/TabItemProps';
+
+
+/*************************************************
+ * FEATURE TIPLERI
+ * ------------------------------------------------
+ * Uygulama içi feature yapıları ve
+ * feature bileşenlerinin prop tipleri burada tutulur.
+ *************************************************/
+export * from './features/home/hero';
+
 
 

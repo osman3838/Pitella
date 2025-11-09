@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import { useAppSelector } from '@/redux/hooks';
 import { useMeQuery } from '@/redux/api/auth.api';
 import BottomBar from '@/components/navigation/BottomBar';
+import Header from '@/components/navigation/Header';
 
 export default function AppLayout() {
   const token = useAppSelector((s) => s.session.accessToken);
@@ -20,10 +21,10 @@ export default function AppLayout() {
 
   return (
     <>
-
+    <Header/>
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         headerTitleAlign: 'center',
       }}
     >
@@ -33,7 +34,8 @@ export default function AppLayout() {
       />
       <Stack.Screen
         name="home"
-        options={{ title: 'Anasayfa' }}
+        options={{ title: 'Anasayfa' ,headerShown:false}}
+
       />
 
     </Stack>
