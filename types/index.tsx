@@ -20,6 +20,7 @@ export * from './ui/iconButtonTypes';
 export * from './ui/textTypes';
 export * from './ui/otpTypes';
 export * from './ui/avatarTypes';
+export * from './ui/section';
 
 
 /*************************************************
@@ -77,6 +78,19 @@ export * from './navigation/TabItemProps';
  * feature bileşenlerinin prop tipleri burada tutulur.
  *************************************************/
 export * from './features/home/hero';
+
+/*************************************************
+ * CATEGORY TIPLERI
+ * ------------------------------------------------
+ * Kategori yapıları ve
+ * kategori bileşenlerinin prop tipleri burada tutulur.
+ *************************************************/
+
+export * from './category/categoryTypes';
+export * from './ui/cardTypes';
+
+
+
 
 
 

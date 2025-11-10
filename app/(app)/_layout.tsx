@@ -1,11 +1,10 @@
-import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { Redirect } from 'expo-router';
-import { Stack } from 'expo-router';
-import { useAppSelector } from '@/redux/hooks';
-import { useMeQuery } from '@/redux/api/auth.api';
 import BottomBar from '@/components/navigation/BottomBar';
 import Header from '@/components/navigation/Header';
+import { useMeQuery } from '@/redux/api/auth.api';
+import { useAppSelector } from '@/redux/hooks';
+import { Redirect, Stack } from 'expo-router';
+import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function AppLayout() {
   const token = useAppSelector((s) => s.session.accessToken);

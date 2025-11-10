@@ -28,7 +28,6 @@ const Avatar = memo(
       borderWidth,
     };
 
-    // Kaynak yoksa düz placeholder
     if (!source) {
       return (
         <View ref={ref} style={[baseStyle, styles.center, { backgroundColor: fallbackColor }, style]}>

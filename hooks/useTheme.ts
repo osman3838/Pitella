@@ -9,7 +9,9 @@ export function useTheme() {
       gray: '#e6e6e6',        
       border: '#dddddd',      
 
+      accent:"#C9986E",
       primaryDark:'#0a142f',
+      success:"#2ecc71",
       gold:'#926f4d',
       text: '#111111',        
       mutedText: '#6b7280',   
