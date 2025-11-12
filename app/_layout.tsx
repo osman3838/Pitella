@@ -18,7 +18,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import Toast from 'react-native-toast-message';
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: '()',
 };
 
 export default function RootLayout() {

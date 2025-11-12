@@ -1,16 +1,15 @@
-// src/redux/api/auth.api.ts
-import { baseQueryWithReauth } from '@/redux/api/base';
+import { baseQueryWithReauth } from '@/redux/api/base.primary';
 import { setTokens, setUser, signOut } from '@/redux/slices/session.slice';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import {
-    LoginRequestDTO,
-    LoginResponseDTO,
-    MeResponseDTO,
-    RegisterRequestDTO,
-    RegisterResponseDTO,
-    User,
+  LoginRequestDTO,
+  LoginResponseDTO,
+  MeResponseDTO,
+  RegisterRequestDTO,
+  RegisterResponseDTO,
+  User,
 } from '@/types';
 
 type NormalizedError = { status: number; message: string; raw?: unknown };

@@ -1,29 +1,35 @@
-import { AppText } from '@/components/ui/AppText';
 import { useTheme } from '@/hooks/useTheme';
 import Icon from '@/icons';
+import { useListSitesQuery } from '@/redux/api/automat.api';
 import type { MapCardProps } from '@/types/ui/map';
 import React, { useMemo } from 'react';
-import { ImageBackground, Platform, Pressable, StyleSheet, View } from 'react-native';
-let MapView: any, Marker: any, Circle: any;
-try {
-  const maps = require('react-native-maps');
-  MapView = maps.default;
-  Marker = maps.Marker;
-  Circle = maps.Circle;
-} catch (_) {}
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import MapView, { Circle, Marker } from 'react-native-maps';
+
 
 export default function MapCard({
-  title = 'Kayseri / Talas',
-  center,
+  title = 'Kayseri / Talas', // şehir / semt bilgisi
+  center = { latitude: 38.6939, longitude: 35.5530 },
   radiusMeters = 800,
-  pins = [],
-  useRealMap = false,
+  pins = [
+    { id: 1, latitude: 38.698, longitude: 35.547 },
+    { id: 2, latitude: 38.690, longitude: 35.560 },
+  ],
+  
   onPressPin,
   onPressLocate,
   onPressAction,
   style,
 }: MapCardProps) {
+    const { data, isLoading, error } = useListSitesQuery();
+    console.log(data);
+    
+
+  // Konsol çıktıları (tek noktadan)
+
   const { colors } = useTheme();
+
+
   const region = useMemo(() => {
     const latDelta = Math.max((radiusMeters / 111_000) * 2.2, 0.01);
     const lonDelta = latDelta * 0.8;
@@ -31,143 +37,107 @@ export default function MapCard({
   }, [center, radiusMeters]);
 
   return (
-    <View style={[s.card, { backgroundColor: colors.surface }, style]}>
-      <View style={[s.header, { paddingHorizontal: 12, paddingTop: 8 }]}>
-        <AppText size={12} weight="semiBold">{title}</AppText>
+    <View style={[styles.card, style]}>
+      {/* Harita */}
+      <MapView
+        style={StyleSheet.absoluteFillObject}
+        initialRegion={region}
+        scrollEnabled={false}
+        zoomEnabled={false}
+        rotateEnabled={false}
+        pitchEnabled={false}
+        customMapStyle={mapStyle}
+      >
+        <Circle
+          center={center}
+          radius={radiusMeters}
+          strokeColor={colors.primary ?? '#FF6B00'}
+          fillColor="rgba(255,107,0,0.08)"
+          strokeWidth={2}
+        />
+        <Marker coordinate={center} pinColor="#00AEEF" />
+        {pins.map((p) => (
+          <Marker
+            key={p.id}
+            coordinate={{ latitude: p.latitude, longitude: p.longitude }}
+            pinColor={p.id === 1 ? '#FF6B00' : '#A0A0A0'}
+            onPress={() => onPressPin?.(p)}
+          />
+        ))}
+      </MapView>
+
+      {/* Şehir / Semt Başlığı */}
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleText}>{title}</Text>
       </View>
 
-      <View style={s.body}>
-        {useRealMap && MapView ? (
-          <MapView
-            style={StyleSheet.absoluteFill}
-            initialRegion={region}
-            showsUserLocation
-            pitchEnabled={false}
-            rotateEnabled={false}
-            toolbarEnabled={false}
-            showsMyLocationButton={false}
-            moveOnMarkerPress={false}
-            provider={Platform.OS === 'android' ? 'google' : undefined}
-          >
-            <Circle
-              center={center}
-              radius={radiusMeters}
-              strokeColor="#FF6B6B"
-              fillColor="rgba(255, 107, 107, 0.12)"
-              strokeWidth={2}
-              strokePattern={[8, 8]}
-            />              {pins.map(p => (
-              <Marker
-                key={p.id}
-                coordinate={{ latitude: p.latitude, longitude: p.longitude }}
-                title={p.title}
-                pinColor={p.color ?? '#FF6B6B'}
-                onPress={() => onPressPin?.(p)}
-              />
-            ))}
-          </MapView>
-        ) : (
-          <ImageBackground
-            source={''} // basit gri çizgili bir görsel koy
-            style={StyleSheet.absoluteFill}
-            imageStyle={{ resizeMode: 'cover', opacity: 0.45 }}
-          >
-            {/* radius overlay */}
-            <View style={s.centerWrap}>
-              <View style={s.radiusOuter}>
-                <View style={s.radiusInner} />
-              </View>
+      {/* Alt metin */}
+      <View style={styles.bottomText}>
+        <Text style={styles.searching}>Aranıyor.</Text>
+      </View>
 
-              {/* mavi kullanıcı noktası */}
-              <View style={s.meDot} />
-
-              {/* örnek pinler */}
-              {pins.map((p, i) => (
-                <View key={p.id ?? String(i)} style={[s.pinDot, { left: 60 + i * 24, top: 40 + (i % 2) * 28 }]} />
-              ))}
-            </View>
-          </ImageBackground>
-        )}
-
-        {/* Right controls */}
-        <View style={s.controls}>
-          <Pressable onPress={onPressLocate} style={[s.ctrlBtn, { backgroundColor: colors.surface }]}>
-            <Icon name="Crosshair" size={18} color={colors.text} />
-          </Pressable>
-          <Pressable onPress={onPressAction} style={[s.ctrlBtn, { backgroundColor: colors.primary }]}>
-            <Icon name="Settings" size={18} color="#fff" />
-          </Pressable>
-        </View>
+      {/* Sağ alt kontrol tuşları */}
+      <View style={styles.controls}>
+        <Pressable style={styles.button} onPress={() => onPressAction?.('zoomIn')}>
+          <Icon name="plus" size={20} color="#fff" />
+        </Pressable>
+        <Pressable style={styles.button} onPress={() => onPressAction?.('zoomOut')}>
+          <Icon name="minus" size={20} color="#fff" />
+        </Pressable>
       </View>
     </View>
   );
 }
 
-const s = StyleSheet.create({
+/* Minimalist harita stili */
+const mapStyle = [
+  { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#f8f8f8' }] },
+  { featureType: 'road', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', stylers: [{ color: '#ffffff' }] },
+];
+
+const styles = StyleSheet.create({
   card: {
     borderRadius: 16,
     overflow: 'hidden',
-  },
-  header: { zIndex: 2 },
-  body: {
-    position: 'relative',
-    height: 220, // Home tasarımına uygun sabit yükseklik
-    overflow: 'hidden',
-    borderRadius: 16,
-  },
-
-  // Mock mode
-  centerWrap: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  radiusOuter: {
-    width: 180,
     height: 180,
-    borderRadius: 180,
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: '#FF6B6B',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255, 107, 107, 0.12)',
+    backgroundColor: '#fafafa',
+    position: 'relative',
   },
-  radiusInner: {
-    width: 120,
-    height: 120,
-    borderRadius: 120,
-    borderWidth: 1,
-    borderStyle: 'dashed',
-    borderColor: 'rgba(255, 107, 107, 0.6)',
-  },
-  meDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 10,
-    backgroundColor: '#1E90FF',
+  titleContainer: {
     position: 'absolute',
+    top: 8,
+    left: 12,
   },
-  pinDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 12,
-    backgroundColor: '#FF6B6B',
+  titleText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#000',
+  },
+  bottomText: {
     position: 'absolute',
+    left: 12,
+    bottom: 8,
   },
-
+  searching: {
+    fontWeight: '700',
+    fontSize: 14,
+    color: '#000',
+  },
   controls: {
     position: 'absolute',
-    right: 10,
-    bottom: 12,
-    gap: 10,
+    right: 8,
+    bottom: 8,
+    flexDirection: 'row',
+    gap: 6,
   },
-  ctrlBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+  button: {
+    backgroundColor: '#FF6B00',
+    width: 34,
+    height: 34,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 2,
   },
 });
