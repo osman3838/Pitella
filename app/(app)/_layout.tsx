@@ -34,9 +34,19 @@ export default function AppLayout() {
       <Stack.Screen
         name="home"
         options={{ title: 'Anasayfa' ,headerShown:false}}
-
+        
       />
 
+      <Stack.Screen
+        name="pay"
+        options={{ title: 'Ödeme' ,headerShown:false}}
+
+      />
+      <Stack.Screen
+        name="profile"
+        options={{ title: 'Profil' ,headerShown:false}}
+
+      />
     </Stack>
     <BottomBar />
     </>

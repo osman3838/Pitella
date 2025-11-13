@@ -78,6 +78,7 @@ export * from './navigation/TabItemProps';
  * feature bileşenlerinin prop tipleri burada tutulur.
  *************************************************/
 export * from './features/home/hero';
+export * from './features/profile/quick';
 
 /*************************************************
  * CATEGORY TIPLERI
@@ -89,7 +90,12 @@ export * from './features/home/hero';
 export * from './category/categoryTypes';
 export * from './ui/cardTypes';
 
-
+/*************************************************
+ * QR SCANNER TIPLERI
+ * ------------------------------------------------
+ * QR scanner bileşenlerinin prop tipleri burada tutulur.
+ *************************************************/
+export * from './hooks/qrScannerTypes';
 
 
 

@@ -41,9 +41,8 @@ export default function FoodCard({
         )}
       </View>
 
-      {/* BODY */}
       <View style={s.body}>
-        {/* Title + rating */}
+
         <View style={s.row}>
           <AppText size={18} weight="bold" color="text" style={{ flex: 1 }} numberOfLines={1}>
             {title}
@@ -51,8 +50,9 @@ export default function FoodCard({
 
           {!!rating && (
             <View style={[s.row, { gap: 6 }]}>
-              <Icon name="Star" size={16} color={colors.primary} />
+              <Icon name="Review" size={16} color="#d6d147ff" />
               <AppText size={13}>
+
                 {rating.value.toFixed(1)}
                 {!!rating.count && ` (${rating.count})`}
               </AppText>
@@ -108,7 +108,7 @@ export default function FoodCard({
               ]}
               hitSlop={8}
             >
-              <Icon name="Plus" size={22} color="#fff" />
+              <Icon name="Plus" size={22} color="white" />
           </Pressable>
           </View>
         )}
