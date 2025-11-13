@@ -54,6 +54,7 @@ export * from './domain/user';
  * Domain’den farklıdır; API değişirse sadece burası değişir.
  *************************************************/
 export * from './dto/auth';
+export * from './dto/otomat';
 
 
 /*************************************************
