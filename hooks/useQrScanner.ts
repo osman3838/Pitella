@@ -1,40 +1,49 @@
 // src/hooks/useQrScanner.ts
-import type { ScanState } from '@/types';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+  openScanner,
+  setScanResult,
+  setScanState
+} from '@/redux/slices/qrScanner.slice';
+import type { RootState } from '@/redux/store';
 import { Camera } from 'expo-camera';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type Opts = {
-  cooldownMs?: number;   // aynı kodun tekrar tetiklenmesini engellemek için
+  cooldownMs?: number;
 };
 
 export function useQrScanner(opts: Opts = {}) {
   const { cooldownMs = 900 } = opts;
 
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [state, setState] = useState<ScanState>('idle');
-  const [lastCode, setLastCode] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const { visible, state, lastResult } = useAppSelector(
+    (s: RootState) => s.qrScanner
+  );
 
-  // opsiyonel: torch kontrolü (CameraView'de kullanacaksın)
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [torchEnabled, setTorchEnabled] = useState(false);
 
-  // debounce için zaman damgası
   const lastScanAtRef = useRef<number>(0);
 
-  // izin iste
   const requestPermission = useCallback(async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
     const granted = status === 'granted';
     setHasPermission(granted);
-    setState(granted ? 'scanning' : 'denied');
+
+    if (granted) {
+      dispatch(openScanner());
+    } else {
+      dispatch(setScanState('denied'));
+    }
+
     return granted;
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    // ilk açılışta izin iste
     requestPermission();
   }, [requestPermission]);
 
-  // pay.tsx / ScanBox -> onBarcodeScanned: ({ data }) => handleScan({ data })
   const handleScan = useCallback(
     ({ data }: { data: string }) => {
       if (state !== 'scanning') return;
@@ -43,41 +52,52 @@ export function useQrScanner(opts: Opts = {}) {
       if (now - lastScanAtRef.current < cooldownMs) return;
       lastScanAtRef.current = now;
 
-      setLastCode(data);
-      setState('found'); // burada navigate / API çağrını yap
+      dispatch(setScanResult(data));
     },
-    [state, cooldownMs]
+    [state, cooldownMs, dispatch]
   );
 
-  // kullanıcı tekrar izin vermek isterse
   const requestAgain = useCallback(async () => {
     await requestPermission();
   }, [requestPermission]);
 
-  // taramayı yeniden başlat
   const reset = useCallback(() => {
-    setLastCode(null);
-    setState(hasPermission ? 'scanning' : 'denied');
     lastScanAtRef.current = 0;
-  }, [hasPermission]);
+    if (hasPermission) {
+      dispatch(openScanner());
+    } else {
+      dispatch(setScanState('denied'));
+    }
+  }, [dispatch, hasPermission]);
 
-  // manuel kontrol: durdur/başlat
-  const pause = useCallback(() => setState(prev => (prev === 'scanning' ? 'idle' : prev)), []);
-  const resume = useCallback(() => setState(prev => (hasPermission ? 'scanning' : prev)), [hasPermission]);
+  const pause = useCallback(() => {
+    if (state === 'scanning') {
+      dispatch(setScanState('idle'));
+    }
+  }, [dispatch, state]);
 
-  // torch toggler
-  const toggleTorch = useCallback(() => setTorchEnabled(v => !v), []);
+  const resume = useCallback(() => {
+    if (hasPermission) {
+      dispatch(setScanState('scanning'));
+    }
+  }, [dispatch, hasPermission]);
+
+  const toggleTorch = useCallback(
+    () => setTorchEnabled((v) => !v),
+    []
+  );
+
+  const showCamera =
+    hasPermission === true && visible && (state === 'scanning' || state === 'found');
 
   return {
-    // mevcut dönenler
     hasPermission,
     state,
-    lastCode,
+    lastCode: lastResult,
+    showCamera,
     handleScan,
     requestAgain,
     reset,
-
-    // ek kontroller
     torchEnabled,
     toggleTorch,
     pause,

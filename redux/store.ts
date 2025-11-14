@@ -14,24 +14,32 @@ import {
 
 import { authApi } from '@/redux/api/auth.api';
 import { automatApi } from '@/redux/api/automat.api';
-import { sessionListener } from '@/redux/listeners/session.listener'; // ← EKLENDİ
+import { otomatApi } from '@/redux/api/otomat.api';
+import { sessionListener } from '@/redux/listeners/session.listener';
+import qrScannerReducer from '@/redux/slices/qrScanner.slice'; // ← QR SLICE
 import sessionReducer, { signOut } from '@/redux/slices/session.slice';
 import { SecureStorage } from '@/storage/securePersist';
 
 // --------------------- Root Reducer ---------------------
 const rootReducer = combineReducers({
   session: sessionReducer,
+  qrScanner: qrScannerReducer,                         // ← QR SLICE EKLENDİ
   [authApi.reducerPath]: authApi.reducer,
   [automatApi.reducerPath]: automatApi.reducer,
+  [otomatApi.reducerPath]: otomatApi.reducer,
 });
 
 // --------------------- Persist Config ---------------------
 const persistConfig = {
   key: 'root',
-  keyPrefix: '', // ':' kalktı çünkü SecureStore ':' kabul etmez
+  keyPrefix: '',
   storage: SecureStorage,
-  whitelist: ['session'],
-  blacklist: [authApi.reducerPath, automatApi.reducerPath],
+  whitelist: ['session'], // sadece session persist
+  blacklist: [
+    authApi.reducerPath,
+    automatApi.reducerPath,
+    otomatApi.reducerPath,
+  ],
   timeout: 0,
 };
 
@@ -43,6 +51,7 @@ const hygiene: Middleware = (api) => (next) => (action) => {
   if (action.type === signOut.type || action.type === PURGE) {
     api.dispatch(authApi.util.resetApiState());
     api.dispatch(automatApi.util.resetApiState());
+    api.dispatch(otomatApi.util.resetApiState());
   }
   return result;
 };
@@ -56,8 +65,13 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
-      .prepend(sessionListener.middleware) // ← listener middleware en öne
-      .concat(authApi.middleware, automatApi.middleware, hygiene),
+      .prepend(sessionListener.middleware)
+      .concat(
+        authApi.middleware,
+        automatApi.middleware,
+        otomatApi.middleware,
+        hygiene,
+      ),
   devTools: __DEV__,
 });
 

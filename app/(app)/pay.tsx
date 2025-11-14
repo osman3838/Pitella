@@ -9,15 +9,37 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 export default function PayScreen() {
   const t = useTheme();
   const s = styles(t);
-  const { hasPermission, state, handleScan, requestAgain } = useQrScanner();
 
-  const showCamera = hasPermission === true && (state === 'scanning' || state === 'found');
+  const {
+    hasPermission,
+    state,
+    showCamera,
+    handleScan,
+    requestAgain,
+    torchEnabled,
+    toggleTorch,
+  } = useQrScanner();
 
   return (
     <View style={s.container}>
-      <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-        <ScanHeader />
-        <ScanBox showCamera={showCamera} state={state} onScan={handleScan} />
+      <ScanHeader />
+
+      <View style={s.scannerArea}>
+        <ScanBox
+          showCamera={showCamera}
+          state={state}
+          hasPermission={hasPermission}
+          onScan={handleScan}
+          torchEnabled={torchEnabled}
+          onToggleTorch={toggleTorch}
+        />
+      </View>
+
+      <ScrollView
+        style={s.controlsScroll}
+        contentContainerStyle={s.controlsContent}
+        showsVerticalScrollIndicator={false}
+      >
         <ScanControls
           hasPermission={hasPermission}
           state={state}
@@ -36,9 +58,16 @@ const styles = (t: ReturnType<typeof useTheme>) =>
       paddingHorizontal: t.spacing.lg,
       paddingTop: t.spacing.lg,
     },
-    content: {
-      minHeight: '100%',
-      alignItems: 'center',
+    scannerArea: {
+      width: '100%',
+      aspectRatio: 1,
+      marginTop: t.spacing.lg,
+      marginBottom: t.spacing.lg,
+    },
+    controlsScroll: {
+      flex: 1,
+    },
+    controlsContent: {
       paddingBottom: 120,
     },
   });

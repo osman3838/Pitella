@@ -92,12 +92,25 @@ export * from './category/categoryTypes';
 export * from './ui/cardTypes';
 
 /*************************************************
- * QR SCANNER TIPLERI
+ * HOOK TIPLERI
  * ------------------------------------------------
- * QR scanner bileşenlerinin prop tipleri burada tutulur.
+ * Hook bileşenlerinin prop tipleri burada tutulur.
  *************************************************/
 export * from './hooks/qrScannerTypes';
 
 
 
+/*************************************************
+ * COMPONENT TIPLERI
+ * ------------------------------------------------
+ * Component bileşenlerinin prop tipleri burada tutulur.
+ *************************************************/
+export * from './components/qrScannerTypes';
+export * from './components/location';
 
+/*************************************************
+ * STORE TIPLERI
+ * 
+ * Store tipleri burada tutulur.
+ *************************************************/
+export * from './store/qrScanner';

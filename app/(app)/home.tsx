@@ -1,8 +1,8 @@
 // app/(tabs)/home.tsx veya senin Home ekran dosyan
 import { Images } from '@/assets';
-import Category from '@/components/Home/Category/Category';
-import Hero from '@/components/Home/Hero';
-import MapCard from '@/components/Home/MapCard/MapCard';
+import Category from '@/components/screen/Home/Category/Category';
+import Hero from '@/components/screen/Home/Hero';
+import MapCard from '@/components/screen/Home/MapCard/MapCard';
 import { useTheme } from '@/hooks/useTheme';
 import { mocks } from '@/mocks';
 import { useAppSelector } from '@/redux/hooks';
@@ -63,7 +63,7 @@ export default function Home() {
           ]}
           data={mocks.soups}
         />
-        <MapCard title='Kayseri / Talas' center={{ latitude: 39.9042, longitude: 35.1656 }}/>
+      <MapCard />
       </ScrollView>
     </View>
   );

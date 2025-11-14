@@ -1,23 +1,53 @@
+// components/screen/Pay/ScanBox.tsx
 import { useTheme } from '@/hooks/useTheme';
 import Icon from '@/icons';
-import type { ScanState } from '@/types/hooks/qrScannerTypes';
+import type { ScanBoxProps } from '@/types/components/qrScannerTypes';
 import { Camera } from 'expo-camera';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-type Props = {
-  showCamera: boolean;
-  state: ScanState;
-  onScan: (e: { data: string }) => void;
-};
-
-export default function ScanBox({ showCamera, state, onScan }: Props) {
+export default function ScanBox({ showCamera, state, onScan }: ScanBoxProps) {
   const t = useTheme();
   const s = styles(t);
 
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!showCamera) return;
+
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, [showCamera]);
+
+  // İzin durumu yüklenirken
+  if (showCamera && hasPermission === null) {
+    return (
+      <View style={s.box}>
+        <View style={s.placeholder}>
+          <ActivityIndicator />
+        </View>
+      </View>
+    );
+  }
+
+  // İzin reddedildiyse
+  if (showCamera && hasPermission === false) {
+    return (
+      <View style={s.box}>
+        <View style={s.placeholder}>
+          <Text style={{ color: t.colors.text, textAlign: 'center' }}>
+            Kamerayı kullanmak için ayarlardan izin vermen gerekiyor.
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={s.box}>
-      {showCamera ? (
+      {showCamera && hasPermission ? (
         <Camera
           onBarCodeScanned={state === 'scanning' ? onScan : undefined}
           style={s.scanner}
@@ -33,16 +63,17 @@ export default function ScanBox({ showCamera, state, onScan }: Props) {
 
 const styles = (t: ReturnType<typeof useTheme>) =>
   StyleSheet.create({
-    box: { alignItems: 'center', marginTop: 12 },
+    box: {
+      flex: 1,
+      zIndex: 1,
+      position: '',
+      alignSelf: 'stretch',
+    },
     scanner: {
-      width: 260,
-      height: 260,
-      borderRadius: 12,
-      overflow: 'hidden',
+      flex: 1, // tam ekran doldur
     },
     placeholder: {
-      width: 260,
-      height: 260,
+      flex: 1,
       borderRadius: 12,
       backgroundColor: t.colors.gray,
       alignItems: 'center',
