@@ -13,14 +13,14 @@ export * from './forms/inputTypes';
  * Buton, ikon, checkbox gibi UI bileşenlerine ait
  * prop tipleri burada tutulur.
  *************************************************/
+export * from './ui/avatarTypes';
 export * from './ui/backButtonTypes';
 export * from './ui/buttonTypes';
 export * from './ui/checkboxTypes';
 export * from './ui/iconButtonTypes';
-export * from './ui/textTypes';
 export * from './ui/otpTypes';
-export * from './ui/avatarTypes';
 export * from './ui/section';
+export * from './ui/textTypes';
 
 
 /*************************************************
@@ -44,8 +44,11 @@ export * from './layout/layout';
  * Uygulamanın "gerçek" veri modelleri.
  * Store, slice ve tüm app bu tipleri kullanır.
  *************************************************/
+export * from './domain/campaing';
 export * from './domain/session';
 export * from './domain/user';
+
+
 
 /*************************************************
  * DTO (API) TIPLERI
@@ -65,8 +68,8 @@ export * from './dto/otomat';
  *************************************************/
 
 
-export * from './navigation/MenuTab';
 export * from './navigation/app-header';
+export * from './navigation/MenuTab';
 
 
 export * from './navigation/TabItemProps';
@@ -80,6 +83,7 @@ export * from './navigation/TabItemProps';
  *************************************************/
 export * from './features/home/hero';
 export * from './features/profile/quick';
+export * from './features/home/Campaign';
 
 /*************************************************
  * CATEGORY TIPLERI
@@ -105,12 +109,22 @@ export * from './hooks/qrScannerTypes';
  * ------------------------------------------------
  * Component bileşenlerinin prop tipleri burada tutulur.
  *************************************************/
-export * from './components/qrScannerTypes';
 export * from './components/location';
+export * from './components/qrScannerTypes';
 
 /*************************************************
+ * 
  * STORE TIPLERI
  * 
  * Store tipleri burada tutulur.
  *************************************************/
 export * from './store/qrScanner';
+
+/*************************************************
+ * 
+ * UI TIPLERI
+ * 
+ * UI bileşenlerinin prop tipleri burada tutulur.
+ *************************************************/
+export * from './ui/Campaign';
+

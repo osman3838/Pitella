@@ -1,5 +1,6 @@
 // app/(tabs)/home.tsx veya senin Home ekran dosyan
 import { Images } from '@/assets';
+import { CampaignSection } from '@/components/screen/Home/Campaign';
 import Category from '@/components/screen/Home/Category/Category';
 import Hero from '@/components/screen/Home/Hero';
 import MapCard from '@/components/screen/Home/MapCard/MapCard';
@@ -7,12 +8,11 @@ import { useTheme } from '@/hooks/useTheme';
 import { mocks } from '@/mocks';
 import { useAppSelector } from '@/redux/hooks';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function Home() {
   const t = useTheme();
   const s = styles(t);
-
   const user = useAppSelector((state) => state.session.user);
 
   return (
@@ -64,6 +64,7 @@ export default function Home() {
           data={mocks.soups}
         />
       <MapCard />
+      <CampaignSection title="Kampanyalar" campaigns={mocks.campaigns} />
       </ScrollView>
     </View>
   );

@@ -6,5 +6,11 @@ export const Images = {
       Cup1: require('./images/home/hero/foreground-cup1.png'),
       Cup2: require('./images/home/hero/foreground-cup2.png'),
     },
+    Campaign: {
+      Campaign: require('./images/campaings/campaing-01.jpg'),
+      
+    },
+
   },
+
 } as const;

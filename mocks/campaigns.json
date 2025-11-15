@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cmp-1",
+    "title": "Sebze Çorbalarında",
+    "discountText": "%20 İndirim",
+    "description": "Tüm sebze çorbası çeşitlerinde geçerli özel %20 indirim fırsatı.",
+    "code": "VEG20",
+    "expiresAt": "2025-11-20",
+    "image": "campaign1.jpg"
+  },
+  {
+    "id": "cmp-2",
+    "title": "Etli Çorbalarda",
+    "discountText": "%15 İndirim",
+    "description": "Etli çorba çeşitlerinde geçerli %15 indirim fırsatı.",
+    "code": "MEAT15",
+    "expiresAt": "2025-10-15",
+    "image": "campaign2.jpg"
+  },
+  {
+    "id": "cmp-3",
+    "title": "Öğrencilere Özel",
+    "discountText": "%10 İndirim",
+    "description": "Öğrenciler için tüm ürünlerde ekstra %10 indirim fırsatı.",
+    "code": "STUDENT10",
+    "expiresAt": "2025-12-31",
+    "image": "campaign3.jpg"
+  }
+]

@@ -38,3 +38,4 @@ export interface FoodCardProps {
   contentRight?: ReactNode;
   contentBottom?: ReactNode;
 }
+
