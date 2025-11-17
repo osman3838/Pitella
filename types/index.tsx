@@ -84,6 +84,7 @@ export * from './navigation/TabItemProps';
 export * from './features/home/hero';
 export * from './features/profile/quick';
 export * from './features/home/Campaign';
+export * from './features/checkout';
 
 /*************************************************
  * CATEGORY TIPLERI

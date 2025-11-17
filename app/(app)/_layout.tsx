@@ -22,6 +22,7 @@ export default function AppLayout() {
     <>
     <Header/>
     <Stack
+    initialRouteName="checkout"
       screenOptions={{
         headerShown: false,
         headerTitleAlign: 'center',
@@ -45,6 +46,11 @@ export default function AppLayout() {
       <Stack.Screen
         name="profile"
         options={{ title: 'Profil' ,headerShown:false}}
+
+      />
+      <Stack.Screen
+        name="checkout"
+        options={{ title: 'Çorba Kodu' ,headerShown:false}}
 
       />
     </Stack>
