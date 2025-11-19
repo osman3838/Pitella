@@ -110,6 +110,7 @@ export default function MapCard() {
           coords={coords}
           radiusKm={maxKm}
           markers={markers}
+          filters={true}
           style={StyleSheet.absoluteFillObject}
         />
 

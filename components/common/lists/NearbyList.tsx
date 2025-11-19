@@ -1,4 +1,3 @@
-// components/common/lists/NearbyList.tsx
 import type { NearbySiteDTO } from '@/types/dto/otomat';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -35,7 +34,6 @@ export default function NearbyList({
               isActive ? styles.rowActive : styles.rowInactive,
             ]}
           >
-            {/* Otomat adı */}
             <Text
               style={[
                 styles.rowName,
@@ -46,14 +44,12 @@ export default function NearbyList({
               {name}
             </Text>
 
-            {/* Uzaklık */}
             {typeof s.distance_km === 'number' && (
               <Text style={styles.rowDistance}>
                 {s.distance_km.toFixed(1)} km
               </Text>
             )}
 
-            {/* Rota butonu */}
             <Pressable
               onPress={() => onPressRoute?.(s)}
               style={[

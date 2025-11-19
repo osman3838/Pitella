@@ -6,24 +6,33 @@ import Center from './Center';
 import Left from './Left';
 import Right from './Right';
 
-export default function Header() {
+export default function Header({
+  left = true,
+  center = true,
+  right = true,
+}: {
+  left?: React.ReactNode;
+  center?: React.ReactNode;
+  right?: React.ReactNode;
+}) {
   const insets = useSafeAreaInsets();
-
+  
   return (
     <View style={[{ paddingTop: Math.max(insets.top, 8) }]}>
       <View style={s.row}>
         {/* Sol slot */}
-        <View style={s.slot}>
+        {left && <View style={s.slot}>
           <Left />
-        </View>
+        </View>}
+
 
         {/* Orta başlık alanı */}
-          <Center />
+        {center && <Center />}
 
         {/* Sağ slot */}
-        <View style={[s.slot, s.alignEnd]}>
+        {right && <View style={[s.slot, s.alignEnd]}>
           <Right />
-        </View>
+        </View>}
       </View>
     </View>
   );

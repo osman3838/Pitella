@@ -9,6 +9,7 @@ type Props = {
   onTopUp: () => void;
   loadingPay?: boolean;
   loadingTopUp?: boolean;
+  code?: string;
 };
 
 export const SummarySection: React.FC<Props> = ({
@@ -17,6 +18,7 @@ export const SummarySection: React.FC<Props> = ({
   onTopUp,
   loadingPay,
   loadingTopUp,
+  code,
 }) => {
   return (
     <View style={styles.container}>
@@ -26,6 +28,7 @@ export const SummarySection: React.FC<Props> = ({
         onTopUp={onTopUp}
         loadingPay={loadingPay}
         loadingTopUp={loadingTopUp}
+        code={code}
       />
     </View>
   );

@@ -1,9 +1,9 @@
-// app/(app)/otomats.tsx
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import LocationPermissionEmptyState from '@/components/common/location/LocationPermissionEmptyState';
+import MapCard from '@/components/screen/Automat/MapCard';
 
 export default function AutomatScreen() {
   const [status, setStatus] = React.useState<'unknown' | 'granted' | 'denied'>(
@@ -25,20 +25,17 @@ export default function AutomatScreen() {
     else setStatus('denied');
   };
 
-  // İzin yokken / bilinmiyorken boş state
   if (status !== 'granted') {
     return (
       <View style={styles.screen}>
-        {/* Header + bottom tab zaten layout'tan gelir */}
         <LocationPermissionEmptyState onPressAllow={handleAllowPress} />
       </View>
     );
   }
 
-  // İzin verilmişse gerçek MapCard
   return (
     <View style={styles.screen}>
-      <Automat />
+      <MapCard />
     </View>
   );
 }

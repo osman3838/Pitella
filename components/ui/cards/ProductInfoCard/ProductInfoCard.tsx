@@ -18,6 +18,7 @@ type Props = {
   onTopUp?: () => void;
   loadingPay?: boolean;
   loadingTopUp?: boolean;
+  code?: string;
 };
 
 export const ProductInfoCard: React.FC<Props> = ({
@@ -30,6 +31,7 @@ export const ProductInfoCard: React.FC<Props> = ({
   onTopUp,
   loadingPay,
   loadingTopUp,
+  code,
 }) => {
   const hasActions = !!(onPay && onTopUp);
 
@@ -55,6 +57,7 @@ export const ProductInfoCard: React.FC<Props> = ({
               onTopUp={onTopUp!}
               loadingPay={loadingPay}
               loadingTopUp={loadingTopUp}
+              code={code}
             />
           </View>
         )}

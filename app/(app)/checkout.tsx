@@ -1,24 +1,42 @@
-// app/(stack)/checkout.tsx veya Checkout ekran dosyan
-import React, { useState } from 'react';
+// app/(stack)/checkout.tsx
+import React, { useEffect } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { CodeSection, SummarySection } from '@/components/screen/Checkout';
 import { useTheme } from '@/hooks/useTheme';
-import { mocks } from '@/mocks';
-import type { ProductType } from '@/types/features/checkout';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+  setCode,
+  setProduct,
+} from '@/redux/slices/checkout.slice';
 
 export default function Checkout() {
   const t = useTheme();
   const s = styles(t);
 
-  const [soupCode, setSoupCode] = useState('');
-  const [loadingPay, setLoadingPay] = useState(false);
-  const [loadingTopUp, setLoadingTopUp] = useState(false);
+  const dispatch = useAppDispatch();
+  const { code, loadingPay, loadingTopUp } = useAppSelector(
+    state => state.checkout,
+  );
+  const product = {name:"Çorba",price:10};
 
-  const product = {name:"Çorba",price:10}   ;
+  useEffect(() => {
+    if (!product) {
+      dispatch(
+        setProduct({
+          name: 'Çorba',
+          price: 10,
+        }),
+      );
+    }
+  }, [product, dispatch]);
 
-  const handleCodeComplete = (code: string) => {
-    console.log('Kod tamamlandı:', code);
+  const handleCodeChange = (value: string) => {
+    dispatch(setCode(value));
+  };
+
+  const handleCodeComplete = (value: string) => {
+    dispatch(setCode(value));
   };
 
   const handlePay = async () => {
@@ -28,27 +46,15 @@ export default function Checkout() {
     }
 
     try {
-      setLoadingPay(true);
-      // Burada ödeme isteğini atarsın
-      // await api.checkout.pay({ code: soupCode, productId: product.id });
       Alert.alert('Ödeme', 'Ödeme akışı burada implemente edilecek.');
-    } catch (e) {
-      Alert.alert('Hata', 'Ödeme sırasında bir hata oluştu.');
     } finally {
-      setLoadingPay(false);
     }
   };
 
   const handleTopUp = async () => {
     try {
-      setLoadingTopUp(true);
-      // Burada bakiye yükleme ekranına yönlendirme / akış
-      // router.push('/wallet/topup') gibi
       Alert.alert('Bakiye Yükleme', 'Bakiye yükleme akışı burada olacak.');
-    } catch (e) {
-      Alert.alert('Hata', 'Bakiye yükleme sırasında bir hata oluştu.');
     } finally {
-      setLoadingTopUp(false);
     }
   };
 
@@ -56,12 +62,10 @@ export default function Checkout() {
     <View style={s.container}>
       <ScrollView
         contentContainerStyle={s.content}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         <CodeSection
-          value={soupCode}
-          onChange={setSoupCode}
-
+          value={code}
+          onChange={handleCodeChange}
           onComplete={handleCodeComplete}
           helperText="Otomat ekranındaki 3 haneli kodu giriniz."
         />
@@ -69,6 +73,7 @@ export default function Checkout() {
         {product && (
           <SummarySection
             product={product}
+            code={code}
             onPay={handlePay}
             loadingPay={loadingPay}
             loadingTopUp={loadingTopUp}

@@ -36,7 +36,7 @@ export default function BottomBar({ state, descriptors, navigation }: BottomTabB
         </Link>
 
         {/* MACHINES / LOCATIONS */}
-        <Link href="/(tabs)/machines" asChild>
+        <Link href="/(app)/automat" asChild>
           <Pressable style={s.item}>
             <Icon name="Location" size={32} color={colors.surface} />
             <AppText size={7}>Otomatlar</AppText>

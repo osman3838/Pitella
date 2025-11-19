@@ -5,6 +5,7 @@ import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-nat
 
 type Props = {
   onPay: () => void;
+  code?: string;
   onTopUp: () => void;
   loadingPay?: boolean;
   loadingTopUp?: boolean;
@@ -14,14 +15,21 @@ export const Actions: React.FC<Props> = ({
   onPay,
   onTopUp,
   loadingPay = false,
+  code,
   loadingTopUp = false,
 }) => {
+  const isCodeEmpty = !code || code.trim().length !== 3;
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={[styles.button, styles.payButton]}
+        style={[
+          styles.button,
+          styles.payButton,
+          isCodeEmpty && styles.disabledButton,
+        ]}
         onPress={onPay}
-        disabled={loadingPay}
+        disabled={loadingPay || isCodeEmpty || !code}
         activeOpacity={0.8}
       >
         {loadingPay ? (
@@ -42,7 +50,7 @@ export const Actions: React.FC<Props> = ({
         {loadingTopUp ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <AppText weight="semibold" size={13} color="#fff">
+          <AppText weight="medium" size={13} color="#fff">
             Bakiye Yükle
           </AppText>
         )}
@@ -64,10 +72,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: 120,
   },
+  disabledButton: {
+    opacity: 0.4,
+  },
   payButton: {
-    backgroundColor: '#33D57A', // yeşil
+    backgroundColor: '#33D57A',
   },
   topUpButton: {
-    backgroundColor: '#FFB43A', // turuncu
+    backgroundColor: '#FFB43A',
   },
 });

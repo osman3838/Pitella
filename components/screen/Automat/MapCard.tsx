@@ -1,21 +1,21 @@
 // src/components/pages/automat/MapCard.tsx
 import React, { useMemo } from 'react';
 import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 
 import { useNearby } from '@/hooks/useNearby';
 import type { NearbySiteDTO } from '@/types';
 
+import NearbyList from '@/components/common/lists/NearbyList';
 import { RadiusMap } from '@/components/common/maps/RadiusMap';
 import { useLocationLabels } from '@/hooks/useLocationLabels';
 import type { RadiusMarker } from '@/types';
-import NearbyList from '@/components/common/lists/NearbyList';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyCzj-3xo-m1JYvyB63JTOcX1ZQi5iwWtf8';
 
