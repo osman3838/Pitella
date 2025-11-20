@@ -1,16 +1,15 @@
-// src/components/pages/automat/MapCard.tsx
-import React, { useMemo } from 'react';
+import { useNearbyStatus } from '@/hooks/useNearbyStatus';
+import React from 'react';
 import {
   ActivityIndicator,
-  Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 
+
 import { useNearby } from '@/hooks/useNearby';
-import type { NearbySiteDTO } from '@/types';
+import type { NearbySiteDTO } from '@/types/dto/otomat';
 
 import NearbyList from '@/components/common/lists/NearbyList';
 import { RadiusMap } from '@/components/common/maps/RadiusMap';
@@ -28,40 +27,20 @@ export default function MapCard() {
 
   const sites = (data ?? []) as NearbySiteDTO[];
 
-  // ---------------------------------------------------------------------------
-  // KONUM LABEL'LERİ (şehir / ilçe / mahalle)
-  // ---------------------------------------------------------------------------
   const { regionLabel, subRegionLabel } = useLocationLabels(coords, {
     apiKey: GOOGLE_MAPS_API_KEY,
     language: 'tr',
     fallbackLabel: 'Konumun çevresi',
   });
 
-  // ---------------------------------------------------------------------------
-  // DURUM METNİ
-  // ---------------------------------------------------------------------------
-  const statusText = useMemo(() => {
-    if (!coords) return 'Konum alınıyor…';
-    if (error) return 'Bir hata oluştu.';
-    if (isLoading || isFetching) return 'Otomatlar aranıyor…';
-    if (sites.length > 0) return `${sites.length} otomat bulundu`;
-    return 'Yakında otomat bulunamadı';
-  }, [coords, error, isLoading, isFetching, sites.length]);
+  const statusText = useNearbyStatus({
+    coords,
+    error,
+    isLoading,
+    isFetching,
+    count: sites.length,
+  });
 
-  // ---------------------------------------------------------------------------
-  // SLIDER PROGRESS
-  // ---------------------------------------------------------------------------
-  const progress = useMemo(() => {
-    const span = MAX_RADIUS_KM - MIN_RADIUS_KM;
-    if (span <= 0) return 0;
-
-    const p = (maxKm - MIN_RADIUS_KM) / span;
-    return Math.min(Math.max(p, 0), 1);
-  }, [maxKm]);
-
-  // ---------------------------------------------------------------------------
-  // LOADING STATE (KOORDİNAT YOKKEN)
-  // ---------------------------------------------------------------------------
   if (!coords) {
     return (
       <View style={styles.wrapper}>
@@ -73,22 +52,6 @@ export default function MapCard() {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // SLIDER CLICK EVENT
-  // ---------------------------------------------------------------------------
-  const handleTrackPress = (e: any) => {
-    const { locationX, width } = e.nativeEvent;
-    if (!width) return;
-
-    const ratio = Math.min(Math.max(locationX / width, 0), 1);
-    const nextKm = MIN_RADIUS_KM + ratio * (MAX_RADIUS_KM - MIN_RADIUS_KM);
-
-    setMaxKm(Math.round(nextKm));
-  };
-
-  // ---------------------------------------------------------------------------
-  // DATA → MARKERS
-  // ---------------------------------------------------------------------------
   const markers: RadiusMarker[] = sites.map((s, index) => ({
     id: s.site_id,
     lat: parseFloat(s.lat),
@@ -98,9 +61,6 @@ export default function MapCard() {
     isActive: index === 0,
   }));
 
-  // ---------------------------------------------------------------------------
-  // RENDER
-  // ---------------------------------------------------------------------------
   return (
     <View style={styles.wrapper}>
       <View style={styles.card}>
@@ -108,7 +68,9 @@ export default function MapCard() {
           coords={coords}
           radiusKm={maxKm}
           markers={markers}
-          style={StyleSheet.absoluteFillObject}
+          minRadiusKm={MIN_RADIUS_KM}
+          maxRadiusKm={MAX_RADIUS_KM}
+          onRadiusChange={setMaxKm}
         />
 
         <View style={styles.cityWrapper}>
@@ -121,24 +83,7 @@ export default function MapCard() {
         <Text style={styles.status}>{statusText}</Text>
       </View>
 
-      <View style={styles.progressRow}>
-        <Text style={styles.kmLabel}>{MIN_RADIUS_KM} km</Text>
-
-        <View style={styles.progressBox}>
-          <Pressable style={styles.track} onPress={handleTrackPress}>
-            <View style={[styles.trackFill, { flex: progress }]} />
-            <View style={{ flex: 1 - progress }} />
-          </Pressable>
-
-          <Text style={styles.progressText}>{maxKm} km</Text>
-        </View>
-
-        <Text style={styles.kmLabel}>{MAX_RADIUS_KM} km</Text>
-      </View>
-
-      <ScrollView style={styles.list} contentContainerStyle={{ gap: 6 }}>
-        <NearbyList sites={sites} />
-      </ScrollView>
+      <NearbyList sites={sites} />
     </View>
   );
 }
@@ -154,11 +99,12 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    height: 180,
+    // height: 0,  ← bunu yaparsan hiçbir şey göremezsin, kaldırıyoruz
     borderRadius: 16,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
     marginBottom: 10,
+    position: 'relative',
+    backgroundColor: 'transparent', // arkaplanı kaldırdın
+    overflow: 'visible',
   },
 
   center: {
@@ -193,45 +139,12 @@ const styles = StyleSheet.create({
 
   status: {
     position: 'absolute',
-    bottom: 8,
-    left: 8,
+    left: 0,
+    bottom: 65,
     fontSize: 13,
     fontWeight: '700',
     color: '#000',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
-
-  progressRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-
-  kmLabel: {
-    width: 40,
-    textAlign: 'center',
-    fontSize: 12,
-    color: '#444',
-  },
-
-  progressBox: { flex: 1 },
-
-  track: {
-    height: 6,
-    backgroundColor: '#ddd',
-    borderRadius: 10,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-
-  trackFill: {
-    backgroundColor: '#FF6B00',
-  },
-
-  progressText: {
-    marginTop: 4,
-    fontSize: 11,
-    textAlign: 'center',
-  },
-
-  list: { maxHeight: 220 },
 });

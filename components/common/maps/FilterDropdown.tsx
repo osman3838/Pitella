@@ -1,17 +1,17 @@
 // src/components/common/maps/FilterDropdown.tsx
 import React, { useState } from 'react';
 import {
-    FlatList,
-    Pressable,
-    StyleSheet,
-    View,
-    ViewStyle,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 import { AppText } from '@/components/ui/AppText';
 import {
-    NearbyFilter,
-    NearbyFilterId,
+  NearbyFilter,
+  NearbyFilterId,
 } from '@/config/nearbyFilters';
 
 type Props = {
@@ -38,14 +38,20 @@ export const FilterDropdown: React.FC<Props> = ({
 
   return (
     <View style={[styles.wrapper, style]}>
+      {/* TRIGGER BUTTON (sağa yaslı, turuncu buton görünümü) */}
       <Pressable
         onPress={() => setOpen(prev => !prev)}
         style={({ pressed }) => [
           styles.trigger,
           pressed && styles.triggerPressed,
-        ]}>
-        <AppText weight="semiBold" size={13}>
-          {active.label}
+        ]}
+      >
+        <AppText
+          weight="semiBold"
+          size={13}
+          style={styles.triggerText}
+        >
+          Günün Ürünleri
         </AppText>
       </Pressable>
 
@@ -63,10 +69,13 @@ export const FilterDropdown: React.FC<Props> = ({
                     styles.item,
                     selected && styles.itemSelected,
                     pressed && styles.itemPressed,
-                  ]}>
+                  ]}
+                >
                   <AppText
                     size={13}
-                    weight={selected ? 'semiBold' : 'medium'}>
+                    weight={selected ? 'semiBold' : 'medium'}
+                    style={selected ? styles.itemTextSelected : styles.itemText}
+                  >
                     {item.label}
                   </AppText>
                 </Pressable>
@@ -82,43 +91,54 @@ export const FilterDropdown: React.FC<Props> = ({
 const styles = StyleSheet.create({
   wrapper: {
     position: 'relative',
+    alignSelf: 'flex-end', // varsayılan: sağa yaslı
   },
+
   trigger: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 999,
-    paddingHorizontal: 16,
+    backgroundColor: '#FF6B00',
+    paddingHorizontal: 18,
     paddingVertical: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 3,
+    flexDirection: 'row',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   triggerPressed: {
-    opacity: 0.8,
+    opacity: 0.85,
   },
+  triggerText: {
+    color: '#FFFFFF',
+  },
+
+  // DROPDOWN
   dropdown: {
     position: 'absolute',
     top: 40,
-    left: 0,
-    right: 0,
+    right: 0,         // sağdan açılacak
+    minWidth: 160,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    paddingVertical: 8,
+    borderRadius: 12,
+    paddingVertical: 6,
     shadowColor: '#000',
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.16,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
     elevation: 6,
   },
   item: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
     paddingVertical: 10,
   },
   itemSelected: {
     backgroundColor: '#FFF3E8',
   },
   itemPressed: {
-    opacity: 0.7,
+    opacity: 0.8,
+  },
+  itemText: {
+    color: '#333',
+  },
+  itemTextSelected: {
+    color: '#FF6B00',
   },
 });

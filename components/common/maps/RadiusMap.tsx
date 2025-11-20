@@ -1,8 +1,10 @@
 // src/components/common/maps/RadiusMap.tsx
+import Slider from '@react-native-community/slider';
 import React from 'react';
 import {
   StyleProp,
   StyleSheet,
+  Text,
   View,
   ViewStyle,
 } from 'react-native';
@@ -12,7 +14,6 @@ import MapView, {
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 
-import { FilterDropdown } from '@/components/common/maps/FilterDropdown';
 import {
   NearbyFilter,
   NearbyFilterId,
@@ -37,6 +38,11 @@ type RadiusMapProps = {
   filters?: NearbyFilter[];
   activeFilter?: NearbyFilterId;
   onFilterChange?: (id: NearbyFilterId) => void;
+
+  minRadiusKm?: number;
+  maxRadiusKm?: number;
+
+  onRadiusChange?: (nextKm: number) => void;
 };
 
 export const RadiusMap: React.FC<RadiusMapProps> = ({
@@ -44,85 +50,119 @@ export const RadiusMap: React.FC<RadiusMapProps> = ({
   radiusKm,
   markers = [],
   style,
-  filters,
-  activeFilter,
-  onFilterChange,
+  minRadiusKm = 1,
+  maxRadiusKm = 20,
+  onRadiusChange,
 }) => {
-  const region = {
+  const center = {
     latitude: coords.lat,
     longitude: coords.lng,
+  };
+
+  const region = {
+    latitude: center.latitude,
+    longitude: center.longitude,
     latitudeDelta: 0.02,
     longitudeDelta: 0.02,
   };
 
-  const radiusMeters = radiusKm * 1000;
+  const safeRadiusKm = (() => {
+    const r = Number(radiusKm);
+    if (isNaN(r)) return minRadiusKm;
+    return Math.min(Math.max(r, minRadiusKm), maxRadiusKm);
+  })();
+
+  const radiusMeters = safeRadiusKm * 1000;
 
   return (
-    <View style={[styles.container, style]}>
-      <MapView
-        style={StyleSheet.absoluteFillObject}
-        region={region}
-        provider={PROVIDER_GOOGLE}
-        showsCompass={false}
-        showsPointsOfInterest={false}
-        showsBuildings={false}
-        showsTraffic={false}
-      >
-        <Circle
-          center={{ latitude: coords.lat, longitude: coords.lng }}
-          radius={radiusMeters}
-          strokeColor="#FF6B00"
-          fillColor="rgba(255, 107, 0, 0.09)"
-          strokeWidth={2}
+    <View style={[styles.wrapper, style]}>
+      {/* MAP -------------------------------------------------------------------- */}
+      <View style={styles.mapContainer}>
+        <MapView
+          style={StyleSheet.absoluteFillObject}
+          region={region}
+          provider={PROVIDER_GOOGLE}
+          showsCompass={false}
+          showsPointsOfInterest={false}
+          showsBuildings={false}
+          showsTraffic={false}
+        >
+          {/* RADIUS CIRCLE */}
+          <Circle
+            center={center}
+            radius={radiusMeters}
+            strokeColor="rgba(255, 107, 0, 0.9)"
+            fillColor="rgba(255, 107, 0, 0.08)"
+            strokeWidth={2}
+          />
+
+          {/* USER LOCATION DOT */}
+          <Marker coordinate={center} anchor={{ x: 0.5, y: 0.5 }}>
+            <View style={styles.userDotOuter}>
+              <View style={styles.userDotInner} />
+            </View>
+          </Marker>
+
+          {/* AUTOMAT MARKERS */}
+          {markers.map(m => (
+            <Marker
+              key={m.id}
+              coordinate={{ latitude: m.lat, longitude: m.lng }}
+            >
+              <View
+                style={[
+                  styles.pin,
+                  m.isActive ? styles.pinActive : styles.pinInactive,
+                ]}
+              />
+            </Marker>
+          ))}
+        </MapView>
+      </View>
+
+      {/* SLIDER AREA ------------------------------------------------------------ */}
+      <View style={styles.sliderRow}>
+        <Text style={styles.kmLabel}>{minRadiusKm} km</Text>
+
+        <Slider
+          style={styles.slider}
+          minimumValue={minRadiusKm}
+          maximumValue={maxRadiusKm}
+          step={1}
+          value={safeRadiusKm}
+          minimumTrackTintColor="#FF6B00"
+          maximumTrackTintColor="#ddd"
+          thumbTintColor="#FF6B00"
+          onValueChange={value => {
+            const km = Math.round(value);
+            onRadiusChange?.(km);
+          }}
         />
 
-        <Marker
-          coordinate={{ latitude: coords.lat, longitude: coords.lng }}
-          anchor={{ x: 0.5, y: 0.5 }}
-        >
-          <View style={styles.userDotOuter}>
-            <View style={styles.userDotInner} />
-          </View>
-        </Marker>
-
-        {markers.map(m => (
-          <Marker
-            key={m.id}
-            coordinate={{ latitude: m.lat, longitude: m.lng }}
-            title={m.title}
-            description={m.description}
-          >
-            <View
-              style={[
-                styles.pin,
-                m.isActive ? styles.pinActive : styles.pinInactive,
-              ]}
-            />
-          </Marker>
-        ))}
-      </MapView>
-
-        <View style={styles.filterWrapper}>
-          <FilterDropdown
-            filters={filters!}
-            activeFilter={activeFilter!}
-            onChange={onFilterChange!}
-          />
-        </View>
+        <Text style={styles.kmLabel}>{maxRadiusKm} km</Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 24,
-    overflow: 'hidden',
+  wrapper: {
+    width: '100%',
   },
+
+  mapContainer: {
+    height: 220,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+  },
+
+  /* USER DOT */
   userDotOuter: {
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: 'rgba(0,174,239,0.25)',
+    backgroundColor: 'rgba(0,174,239,0.30)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -132,20 +172,33 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#00AEEF',
   },
+
+  /* PINS */
   pin: {
     width: 12,
     height: 12,
     borderRadius: 6,
   },
-  pinActive: {
-    backgroundColor: '#ff4d00',
+  pinActive: { backgroundColor: '#ff4d00' },
+  pinInactive: { backgroundColor: '#acacac' },
+
+  /* SLIDER AREA */
+  sliderRow: {
+    marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 4,
   },
-  pinInactive: {
-    backgroundColor: '#999',
+
+  kmLabel: {
+    width: 40,
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#555',
   },
-  filterWrapper: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
+
+  slider: {
+    flex: 1,
+    height: 30,
   },
 });

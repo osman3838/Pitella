@@ -21,7 +21,7 @@ export default function BottomBar({ state, descriptors, navigation }: BottomTabB
           </Pressable>
         </Link>
 
-        <Link href="/(tabs)/campaigns" asChild>
+        <Link href="/(app)/campaigns" asChild>
           <Pressable style={s.item}>
             <Icon name="Campains" size={32} color={colors.surface} />
             <AppText size={7}>Kampanyalar</AppText>
