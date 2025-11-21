@@ -14,7 +14,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-// ✅ Toast eklendi
 import Toast from 'react-native-toast-message';
 
 export const unstable_settings = {
@@ -56,7 +55,6 @@ export default function RootLayout() {
             <Stack.Screen name="(app)" options={{ headerShown: false }} />
           </Stack>
 
-          {/* ✅ Toast provider kökte */}
           <Toast />
 
           <StatusBar style="auto" />

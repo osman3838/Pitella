@@ -26,7 +26,6 @@ const pickMessage = (data: any): string =>
   data?.detail ??
   (Array.isArray(data?.errors) ? data.errors[0] : undefined) ??
   'İstek başarısız';
-  
 
 const normalizeError = (
   res: FetchBaseQueryError | { status: number; data?: any }
@@ -68,6 +67,7 @@ export const authApi = createApi({
 
           dispatch(authApi.util.prefetch('me', undefined, { force: true }));
         } catch {
+          // error UI tarafında handle edilecek
         }
       },
     }),
@@ -83,6 +83,7 @@ export const authApi = createApi({
         try {
           const { data } = await queryFulfilled;
 
+          // Backend direkt token döndürürse
           if ('access_token' in data && data.access_token) {
             dispatch(
               setTokens({
@@ -94,15 +95,18 @@ export const authApi = createApi({
             return;
           }
 
+          // Döndürmüyorsa otomatik login dene
           const identifier = arg.email || arg.phone;
           if (identifier) {
             await dispatch(
-              authApi.endpoints.login.initiate(
-                { email_or_phone: identifier, password: arg.password },
-              )
+              authApi.endpoints.login.initiate({
+                email_or_phone: identifier,
+                password: arg.password,
+              } as any)
             ).unwrap();
           }
         } catch {
+          // error normalizeError ile gelecek
         }
       },
     }),
@@ -117,18 +121,22 @@ export const authApi = createApi({
           const { data } = await queryFulfilled;
           dispatch(setUser(data));
         } catch {
+          // 401 vs olursa baseQueryWithReauth ilgilenir
         }
       },
     }),
+
     logout: b.mutation<{ success: boolean } | unknown, void>({
       query: () => ({ url: '/Auth/logout', method: 'POST' }),
       transformErrorResponse: normalizeError,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        // optimistic logout
         dispatch(signOut());
         dispatch(authApi.util.resetApiState());
         try {
           await queryFulfilled;
         } catch {
+          // server tarafı fail etse bile client logout kalır
         }
       },
       invalidatesTags: [{ type: 'Me', id: 'self' }],
