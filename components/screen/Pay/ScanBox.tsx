@@ -1,4 +1,3 @@
-// src/components/screen/Pay/ScanBox.tsx
 import { useTheme } from '@/hooks/useTheme';
 import Icon from '@/icons';
 import type { ScanBoxProps } from '@/types/components/qrScannerTypes';
@@ -13,120 +12,143 @@ import {
 } from 'react-native';
 
 export default function ScanBox(props: ScanBoxProps) {
-  const { showCamera, state, hasPermission, onScan, torchEnabled, onToggleTorch } =
-    props;
+  const {
+    showCamera,
+    state,
+    hasPermission,
+    onScan,
+    torchEnabled,
+    onToggleTorch,
+    onClose,
+  } = props;
 
   const t = useTheme();
   const s = styles(t);
 
+  // Camera açılmadıysa placeholder (normal layout içinde kare kutu)
   if (!showCamera) {
     return (
-      <View style={s.box}>
-        <View style={s.placeholder}>
-          <Icon name="Barcode" size={120} color={t.colors.text} />
-        </View>
+      <View style={s.boxPlaceholder}>
+        <Icon name="Barcode" size={120} color={t.colors.text} />
       </View>
     );
   }
 
   if (hasPermission === null) {
     return (
-      <View style={s.box}>
-        <View style={s.placeholder}>
-          <ActivityIndicator />
-        </View>
+      <View style={s.boxPlaceholder}>
+        <ActivityIndicator />
       </View>
     );
   }
 
   if (hasPermission === false) {
     return (
-      <View style={s.box}>
-        <View style={s.placeholder}>
-          <Text style={s.infoText}>
-            Kamerayı kullanmak için ayarlardan izin vermen gerekiyor.
-          </Text>
-        </View>
+      <View style={s.boxPlaceholder}>
+        <Text style={s.infoText}>
+          Kamerayı kullanmak için ayarlardan izin vermen gerekiyor.
+        </Text>
       </View>
     );
   }
 
+  // FULLSCREEN OVERLAY
   return (
-    <View style={s.box}>
+    <View style={s.fullscreen}>
       <CameraView
         facing="back"
-        style={s.camera}
+        style={StyleSheet.absoluteFillObject}
         onBarcodeScanned={state === 'scanning' ? onScan : undefined}
         enableTorch={torchEnabled ?? false}
       />
 
-      <View pointerEvents="box-none" style={s.overlay}>
-        <View style={s.frameOuter}>
-          <View style={s.frameInner} />
-        </View>
-
-        {onToggleTorch && (
-          <Pressable style={s.torchButton} onPress={onToggleTorch}>
-            <Text style={s.torchText}>
-              {torchEnabled ? 'Feneri kapat' : 'Feneri aç'}
-            </Text>
-          </Pressable>
-        )}
+      {/* Çerçeve */}
+      <View pointerEvents="none" style={s.frameOuter}>
+        <View style={s.frameInner} />
       </View>
+
+      {/* Close Button */}
+      {onClose && (
+        <Pressable onPress={onClose} style={s.closeBtn}>
+          <Text style={s.closeText}>Kapat</Text>
+        </Pressable>
+      )}
+
+      {/* Torch Button */}
+      {onToggleTorch && (
+        <Pressable style={s.torchButton} onPress={onToggleTorch}>
+          <Text style={s.torchText}>
+            {torchEnabled ? 'Feneri kapat' : 'Feneri aç'}
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }
 
 const styles = (t: ReturnType<typeof useTheme>) =>
   StyleSheet.create({
-    box: {
+    // EKRANI %100 KAPLAYAN OVERLAY
+    fullscreen: {
+      ...StyleSheet.absoluteFillObject,
+      zIndex: 999,
+      elevation: 999,
+      backgroundColor: '#000',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    // Normal sayfa içindeki placeholder kutu
+    boxPlaceholder: {
       width: '100%',
       aspectRatio: 1,
-      borderRadius: 16,
-      overflow: 'hidden',
-      backgroundColor: t.colors.gray,
-    },
-    camera: {
-      flex: 1,
-    },
-    placeholder: {
-      flex: 1,
       borderRadius: 16,
       backgroundColor: t.colors.gray,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingHorizontal: 16,
     },
+
     infoText: {
       color: t.colors.text,
       textAlign: 'center',
       fontSize: 14,
+      paddingHorizontal: 20,
     },
-    overlay: {
-      ...StyleSheet.absoluteFillObject,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+
     frameOuter: {
-      width: '70%',
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '8%',
+    },
+
+    frameInner: {
+      width: '100%',
       aspectRatio: 1,
       borderRadius: 20,
-      borderWidth: 1,
-      borderColor: 'rgba(255,255,255,0.35)',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'rgba(0,0,0,0.1)',
+      borderWidth: 3,
+      borderColor: 'rgba(255,255,255,0.9)',
     },
-    frameInner: {
-      width: '80%',
-      height: '80%',
-      borderRadius: 16,
-      borderWidth: 2,
-      borderColor: 'rgba(255,255,255,0.85)',
+
+    closeBtn: {
+      position: 'absolute',
+      top: 48,
+      right: 20,
+      paddingHorizontal: 16,
+      paddingVertical: 10,
+      borderRadius: 30,
+      backgroundColor: 'red',
     },
+    closeText: {
+      color: '#fff',
+      fontSize: 14,
+      fontWeight: '600',
+    },
+
     torchButton: {
       position: 'absolute',
-      bottom: 18,
+      bottom: 50,
+      alignSelf: 'center',
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderRadius: 999,

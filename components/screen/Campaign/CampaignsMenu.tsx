@@ -52,7 +52,7 @@ export default function CampaignsMenu({
         ]}
         onPress={onLogoutPress}
       >
-        <AppText size={14} weight="semiBold">
+        <AppText size={14} weight="semiBold" >
           Çıkış Yap
         </AppText>
       </Pressable>
@@ -62,10 +62,10 @@ export default function CampaignsMenu({
 
 const s = StyleSheet.create({
   container: {
-    marginBottom: 40,
+    marginBottom: 60,
   },
   menuCard: {
-    marginBottom: 18,
+    marginBottom: 38,
   },
   logoutBtn: {
     alignSelf: 'center',

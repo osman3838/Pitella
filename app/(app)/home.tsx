@@ -8,7 +8,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { mocks } from '@/mocks';
 import { useAppSelector } from '@/redux/hooks';
 import React from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function Home() {
   const t = useTheme();
@@ -57,8 +57,7 @@ export default function Home() {
         <Category
           title="Çorbalar"
           chips={[
-            { key: 'veg', label: 'Sebzeli', active: true, icon: 'Leaf' },
-            { key: 'meat', label: 'Etli', icon: 'Fire' },
+            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
 
           ]}
           data={mocks.soups}

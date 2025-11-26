@@ -88,9 +88,6 @@ const FormTextInputInner = forwardRef<FormTextInputHandles, FormTextInputProps>(
               minHeight: controlHeight,
               paddingHorizontal: resolvedInputPaddingH,
               fontFamily: t.font?.family?.regular,
-              shadowColor: 'transparent',
-              shadowOpacity: 0,
-              elevation: 0,
             },
             inputStyle,
           ]}
@@ -100,7 +97,7 @@ const FormTextInputInner = forwardRef<FormTextInputHandles, FormTextInputProps>(
           onBlur={onBlur}
           onFocus={onFocus}
           placeholder={placeholder}
-          placeholderTextColor={t.colors.mutedText}
+          placeholderTextColor={t.colors.border}
           editable={editable}
           secureTextEntry={internalSecure}
           keyboardType={keyboardType}
@@ -168,13 +165,12 @@ const createStyles = (t: ReturnType<typeof useTheme>) =>
       fontWeight: '600' as any,
       marginBottom: t.spacing.xs,
       color: t.colors.text,
+      
     },
     inputWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderWidth: 1,
-      borderColor: t.colors.border,
-      backgroundColor: t.colors.inputBg,
+      backgroundColor: t.colors.inputBg,  
       overflow: 'hidden',
     },
     inputWrapperError: { borderColor: t.colors.danger },
@@ -186,7 +182,7 @@ const createStyles = (t: ReturnType<typeof useTheme>) =>
     input: {
       flex: 1,
       fontSize: 16,
-      color: t.colors.text,
+      color: "black",
     },
     eye: {
       paddingHorizontal: t.spacing.sm,

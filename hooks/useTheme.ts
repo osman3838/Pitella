@@ -8,7 +8,7 @@ export function useTheme() {
       surface: '#e8e4db',  
       gray: '#e6e6e6',        
       border: '#dddddd',      
-
+      borderDark:"#f2f2f2",
       accent:"#C9986E",
       primaryDark:'#0a142f',
       success:"#2ecc71",

@@ -5,13 +5,16 @@ import * as Navigation from './navigation';
 import * as Social from './social';
 import * as FoodCard from './food_card';
 import * as Profile from './profile';
-
+import * as İnput from './input';
+import * as Category from "./category"
 
 export const ICONS = {
   ...Social,
   ...Navigation,
   ...FoodCard,
   ...Profile,
+  ...İnput,
+  ...Category
 } as const;
 
 export type IconName = keyof typeof ICONS;
@@ -27,4 +30,7 @@ export * from './navigation';
 export * from './social';
 export * from './food_card';
 export * from './profile';
+export * from "./input";
+export * from "./category";
+
 

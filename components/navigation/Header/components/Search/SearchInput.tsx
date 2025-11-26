@@ -29,7 +29,7 @@ export default function SearchInput({
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.secondary}
         returnKeyType="search"
         onSubmitEditing={() => onSubmit?.(value)}
         style={[

@@ -18,7 +18,7 @@ export default function Header({
   const insets = useSafeAreaInsets();
   
   return (
-    <View style={[{ paddingTop: Math.max(insets.top, 8) }]}>
+<View style={[{ paddingTop: Math.max(insets.top, 60) }]}>
       <View style={s.row}>
         {/* Sol slot */}
         {left && <View style={s.slot}>

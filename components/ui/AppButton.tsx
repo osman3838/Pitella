@@ -59,8 +59,8 @@ export const AppButton = memo((props: Props) => {
     const pal = palette[variant];
 
     return {
-      contentPaddingH: sdef.ph,
-      contentPaddingV: sdef.pv,
+      contentPaddingH: 7,
+      contentPaddingV: 7,
       borderColor: borderOverride ?? pal.border,
       backgroundColor: bgColor ?? pal.bg,
       btnStyle: {

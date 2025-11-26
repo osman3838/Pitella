@@ -33,12 +33,11 @@ export default function SectionHeader({
           {!!subtitle && <AppText size={12} color="muted">{subtitle}</AppText>}
         </View>
 
-        <View style={s.center}>
+        <View style={s.right}>
           {renderChips ? renderChips(chips) : null}
         </View>
-        <View style={s.right}>
-          {rightExtra ?? null}
-        </View>
+        
+
       </View>
     </View>
   );

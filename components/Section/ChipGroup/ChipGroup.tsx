@@ -7,6 +7,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function ChipGroup({ items }: { items: SectionChip[] }) {
   const { colors } = useTheme();
+  const s = styles(colors);
 
   return (
     <ScrollView
@@ -22,20 +23,29 @@ export default function ChipGroup({ items }: { items: SectionChip[] }) {
             <View
               style={[
                 s.chip,
-                {
-                  backgroundColor: active ? colors.gray : 'transparent',
-                },
+                active ? s.chipActive : s.chipInactive,
               ]}
             >
               {ch.icon && (
-                <Icon
-                  name={ch.icon as any}
-                  size={14}
-                  color={active ? colors.primary : colors.text}
-                />
+                <View style={[s.iconWrapper, active ? s.iconWrapperActive : s.iconWrapperInactive]}>
+                  <Icon
+                    name={ch.icon as any}
+                    size={20}
+                    color={active ? colors.primary : colors.text}
+                  />
+                </View>
               )}
 
-              <AppText size={12} style={{ marginLeft: ch.icon ? 6 : 0 }}>
+              <AppText
+                size={12}
+                weight='semiBold'
+
+                style={[
+                  s.label,
+                  ch.icon ? s.labelWithIcon : null,
+                ]}
+                numberOfLines={2}
+              >
                 {ch.label}
               </AppText>
             </View>
@@ -46,13 +56,47 @@ export default function ChipGroup({ items }: { items: SectionChip[] }) {
   );
 }
 
-const s = StyleSheet.create({
-  row: { gap: 8 },
-  chip: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+const styles = (colors: any) =>
+  StyleSheet.create({
+    row: {
+      gap: 8,
+      paddingHorizontal: 12,
+    },
+    chip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: 24,
+      paddingHorizontal: 10,
+      width:"75%",
+      paddingVertical: 8,
+    },
+    chipActive: {
+      backgroundColor: colors.gray, // aktif olanda arka plan dolu
+      
+    },
+    chipInactive: {
+      backgroundColor: 'transparent',
+    },
+    iconWrapper: {
+      width: 28,
+      height: 28,
+      borderRadius: 30,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: 6,
+    },
+    iconWrapperActive: {
+      backgroundColor: 'white', // aktif olanda ikon beyaz yuvarlak içinde
+    },
+    iconWrapperInactive: {
+      backgroundColor: 'transparent',
+    },
+    label: {
+      maxWidth: 90,
+      fontWeight: '600',
+      lineHeight:11
+    },
+    labelWithIcon: {
+      // ikon varsa zaten marginRight iconWrapper’dan geliyor
+    },
+  });

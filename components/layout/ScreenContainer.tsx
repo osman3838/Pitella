@@ -37,13 +37,14 @@ export default function ScreenContainer({
   return (
     <View style={[s.safe, { backgroundColor: colors.primaryDark }]} testID={testID}>
       <StatusBar barStyle="light-content" />
+      
 
       <View style={[s.header, { backgroundColor: colors.primaryDark,display:'flex',justifyContent:'center',alignItems:'center' }]}>
         {header}
         <AppText color='white' align='center'  size={25} weight='bold' >Soupana</AppText>
       </View>
 
-      <View style={[s.sheet, { backgroundColor: colors.surface }]}>
+      <View style={[s.sheet, { backgroundColor: colors.borderDark }]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
@@ -76,11 +77,11 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
   },
   sheet: {
-    flex: 6,
+    flex: 4,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 16,
-    paddingHorizontal: 24,
+    paddingHorizontal: 54,
   },
   content: {
     paddingTop: 8,

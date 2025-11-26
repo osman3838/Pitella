@@ -1,9 +1,7 @@
 // app/(auth)/login.tsx
-import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import React, { useRef } from 'react';
-import { Alert } from 'react-native';
 import { Controller, FormProvider } from 'react-hook-form';
 import {
   Dimensions,
@@ -29,8 +27,8 @@ import { useInvalidSubmit } from '@/hooks/useInvalidSubmit';
 import { useZodForm } from '@/hooks/useZodForm';
 
 import { useLoginMutation } from '@/redux/api/auth.api';
-import { LoginForm, loginSchema } from '@/validation/schemas/login.schema';
 import { useAppSelector } from '@/redux/hooks';
+import { LoginForm, loginSchema } from '@/validation/schemas/login.schema';
 
 const { height } = Dimensions.get('window');
 
@@ -115,7 +113,7 @@ export default function Login() {
               </AppText>
             </View>
 
-            <AppText weight="bold" size={18} color="#fff" align="center" style={{ lineHeight: 16 }}>
+            <AppText weight="medium" size={18} color="#fff" align="center" style={{ lineHeight: 16 }}>
               fırsatları <AppText color={t.colors.gold}>keşfet!</AppText>
             </AppText>
 
@@ -125,12 +123,13 @@ export default function Login() {
 
         {/* CARD */}
         <View style={s.card}>
-          <AppText weight="bold" size={24} color={t.colors.text} style={s.title}>
+          <View style={{paddingTop:20,paddingHorizontal:20}}> 
+          <AppText weight="bold" size={24}  color={t.colors.text} style={s.title}>
             Giriş Yap
           </AppText>
 
           <FormProvider {...form}>
-            <View style={{ marginTop: t.spacing.lg, gap: 12 }}>
+            <View style={{ marginTop:20, gap: 12 }}>
               {/* Email/Phone */}
               <Controller
                 control={form.control}
@@ -138,7 +137,7 @@ export default function Login() {
                 render={({ field: { value, onChange, onBlur } }) => (
                   <>
                     <FormTextInput
-                      placeholder="E-posta ya da Telefon"
+                      placeholder="Email yada Telefon"
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -146,11 +145,7 @@ export default function Login() {
                       autoCapitalize="none"
                       containerStyle={{ borderRadius: 99 }}
                       leftAdornment={
-                        <Ionicons
-                          name="person-circle-outline"
-                          size={22}
-                          color={t.colors.mutedText}
-                        />
+                     <Icon color={t.colors.surface} size={20} name='User'/>
                       }
                       onSubmitEditing={() => passwordRef.current?.focus()}
                     />
@@ -180,11 +175,8 @@ export default function Login() {
                       returnKeyType="go"
                       containerStyle={{ borderRadius: 99 }}
                       leftAdornment={
-                        <Ionicons
-                          name="lock-closed-outline"
-                          size={22}
-                          color={t.colors.mutedText}
-                        />
+                    
+                        <Icon size={18}  color={t.colors.surface} name='Lock'/>
                       }
                       onSubmitEditing={submit}
                     />
@@ -218,12 +210,12 @@ export default function Login() {
             <AppButton
               block
               round
-              variant="secondary"
-              style={{ width: '60%', borderRadius: 30 }}
+              variant="primary"
+              style={{ width: '60%', borderRadius: 30,marginTop:15 }}
               onPress={submit}
               loading={isLoading}
             >
-              <AppText size={20} weight="bold" color="#fff">Giriş Yap</AppText>
+              <AppText size={25} weight="bold"  color="#fff">Giriş Yap</AppText>
             </AppButton>
           </View>
 
@@ -235,11 +227,11 @@ export default function Login() {
           </View>
 
           <View style={s.socialRow}>
-            <IconButton style={{ borderRadius: 4, paddingHorizontal: 30 }} backgroundColor="#fff">
+            <IconButton style={{ borderRadius: 7, paddingHorizontal: 30 }} backgroundColor="#fff">
               <Icon name="Google" size={30} />
             </IconButton>
 
-            <IconButton style={{ borderRadius: 4, paddingHorizontal: 30 }} backgroundColor="#fff">
+            <IconButton style={{ borderRadius: 7, paddingHorizontal: 30 }} backgroundColor="#fff">
               <Icon name="Apple" size={36} />
             </IconButton>
           </View>
@@ -255,6 +247,7 @@ export default function Login() {
               </AppText>
             </Link>
           </View>
+           </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -267,8 +260,9 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
       backgroundColor: t.colors.primaryDark,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop: t.spacing.lg,
-      paddingBottom: t.spacing.xl,
+      paddingTop:60,
+      paddingBottom: 60,
+
     },
     headerInner: {
       alignItems: 'center',
@@ -281,14 +275,16 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
     },
     card: {
       marginTop: -t.radius * 2,
-      backgroundColor: t.colors.surface,
-      borderTopLeftRadius: t.radius * 2,
-      borderTopRightRadius: t.radius * 2,
+      backgroundColor: t.colors.borderDark,
+      borderTopLeftRadius: t.radius * 1,
+      borderTopRightRadius: t.radius * 1,
+
       padding: t.spacing.xl,
-      minHeight: Math.max(0, height * 0.9),
+      minHeight: Math.max(0, height * 1),
     },
     title: {
       lineHeight: 28,
+      marginLeft:8
     },
     forgotRow: {
       alignItems: 'flex-end',

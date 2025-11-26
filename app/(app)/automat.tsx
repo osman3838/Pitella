@@ -43,6 +43,5 @@ export default function AutomatScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
   },
 });

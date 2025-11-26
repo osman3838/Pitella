@@ -1,8 +1,8 @@
 // components/ui/cards/ProductInfoCard/parts/Actions.tsx
 import { AppText } from '@/components/ui/AppText';
+import { useTheme } from '@/hooks/useTheme';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
-
 type Props = {
   onPay: () => void;
   code?: string;
@@ -18,24 +18,27 @@ export const Actions: React.FC<Props> = ({
   code,
   loadingTopUp = false,
 }) => {
+  const t = useTheme();
+  
   const isCodeEmpty = !code || code.trim().length !== 3;
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={[
-          styles.button,
-          styles.payButton,
-          isCodeEmpty && styles.disabledButton,
-        ]}
-        onPress={onPay}
-        disabled={loadingPay || isCodeEmpty || !code}
-        activeOpacity={0.8}
-      >
+   <TouchableOpacity
+  style={[
+    styles.button,
+    styles.payButton,
+    isCodeEmpty && styles.disabledButton,
+  ]}
+  onPress={onPay}
+  disabled={loadingPay || isCodeEmpty || !code}
+  activeOpacity={0.8}
+>
         {loadingPay ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <AppText weight="semibold" size={13} color="#fff">
+          <AppText weight="bold" size={13} color="#fff">
+
             Ödeme Yap
           </AppText>
         )}
@@ -50,7 +53,7 @@ export const Actions: React.FC<Props> = ({
         {loadingTopUp ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <AppText weight="medium" size={13} color="#fff">
+          <AppText weight="bold" size={13} color="#fff">
             Bakiye Yükle
           </AppText>
         )}
@@ -73,7 +76,8 @@ const styles = StyleSheet.create({
     minWidth: 120,
   },
   disabledButton: {
-    opacity: 0.4,
+    backgroundColor:"#ddd",
+    color:"white",
   },
   payButton: {
     backgroundColor: '#33D57A',

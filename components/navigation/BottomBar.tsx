@@ -28,7 +28,7 @@ export default function BottomBar({ state, descriptors, navigation }: BottomTabB
           </Pressable>
         </Link>
 
-        <Link href="/(app)/checkout" asChild>
+        <Link href="/(app)/pay" asChild>
           <Pressable style={s.item}>
             <Icon name="Barcode" size={30} color={colors.surface} />
             <AppText size={7}>Öde</AppText>
