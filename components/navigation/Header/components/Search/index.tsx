@@ -52,7 +52,7 @@ export default function Search({
           placeholder={placeholder}
         />
       ) : (
-        <SearchButton onPress={() => setOpen(true)} />
+        <SearchButton size={20} onPress={() => setOpen(true)} />
       )}
     </View>
   );

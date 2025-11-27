@@ -25,22 +25,21 @@ export default function CampaignsWallet({
       </AppText>
 
       <View style={[s.card, { backgroundColor:  '#FFFFFF' }]}>
-        <AppText size={12} color="muted">
+        <AppText size={12} color="muted" weight='bold'>
           Bakiye
         </AppText>
         <AppText size={18} weight="bold" style={{ marginTop: 4 }}>
           {wallet.balance.toFixed(2)} {wallet.currency.toLowerCase() === '₺' ? 'tl' : wallet.currency}
         </AppText>
       </View>
-
       <Pressable
         style={[
           s.button,
-          { backgroundColor: colors.accent ?? '#FFC93A' },
+          { backgroundColor: colors.yellow },
         ]}
         onPress={onTopUpPress}
       >
-        <AppText size={14} weight="semibold" color="onPrimary">
+        <AppText size={14} weight="semiBold" color="white">
           Bakiye Yükle
         </AppText>
       </Pressable>
@@ -54,14 +53,18 @@ const s = StyleSheet.create({
   },
   card: {
     borderRadius: 18,
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"space-between",
+
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 10,
     marginBottom: 12,
   },
   button: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 24,
-    paddingVertical: 10,
+    alignSelf: 'flex-end',
+    paddingHorizontal: 13,
+    paddingVertical: 4,
     borderRadius: 999,
   },
 });

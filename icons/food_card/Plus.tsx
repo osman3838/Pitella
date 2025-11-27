@@ -10,9 +10,9 @@ function Plus({
 }: IconProps) {
   return (
        <Svg
-      height="50px"
+      height={size}
       viewBox="0 0 50 50"
-      width="50px"
+      width={size}
       {...rest}
     >
       <Path fill="none" d="M0 0H50V50H0z" />

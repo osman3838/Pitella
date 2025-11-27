@@ -2,9 +2,10 @@ export function useTheme() {
   return {
     colors: {
       primary: '#193370',     
-      secondary: '#d25034',   
+      secondary: '#ff5833',   
 
-      background: '#ffffff',  
+      background: '#ffffff',
+      yellow:"#fbae17",  
       surface: '#e8e4db',  
       gray: '#e6e6e6',        
       border: '#dddddd',      
@@ -12,7 +13,7 @@ export function useTheme() {
       accent:"#C9986E",
       primaryDark:'#0a142f',
       success:"#2ecc71",
-      gold:'#926f4d',
+      gold:'#bd8d5f',
       text: '#111111',        
       mutedText: '#6b7280',   
       danger: '#e11d48',      

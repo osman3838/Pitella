@@ -19,9 +19,9 @@ export default function SearchButton({ onPress, size = 24, hitSlop }: Props) {
       accessibilityLabel="Arama aç"
       hitSlop={hitSlop ?? { top: 0, right: 8, bottom: 8, left: 8 }}
       style={{
-        borderWidth: 1,
+        borderWidth:3,
         borderRadius: 52,
-        padding: 12,
+        padding: 7,
         borderColor: colors.secondary,
       }}
     >

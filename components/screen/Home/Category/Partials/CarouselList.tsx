@@ -1,6 +1,18 @@
 import Carousel from '@/components/common/Carousel';
 import React from 'react';
 
+type CarouselListProps<T> = {
+  data: T[];
+  renderItem: ({ item, index }: { item: T; index: number }) => React.ReactElement;
+  keyExtractor: (item: T, index: number) => string;
+  itemWidth?: number;
+  itemHeight?: number;
+  sidePadding?: number;
+  gap?: number;
+  loop?: boolean;
+  autoPlay?: boolean;
+};
+
 export default function CarouselList<T>({
   data,
   renderItem,
@@ -11,17 +23,7 @@ export default function CarouselList<T>({
   gap = 12,
   loop = false,
   autoPlay = false,
-}: {
-  data: T[];
-  renderItem: ({ item, index }: { item: T; index: number }) => React.ReactElement;
-  keyExtractor: (item: T, index: number) => string;
-  itemWidth?: number;
-  itemHeight?: number;
-  sidePadding?: number;
-  gap?: number;
-  loop?: boolean;
-  autoPlay?: boolean;
-}) {
+}: CarouselListProps<T>) {
   return (
     <Carousel
       data={data}

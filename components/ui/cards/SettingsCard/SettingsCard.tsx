@@ -33,8 +33,7 @@ export function SettingsCard({
   return (
     <View
       style={[
-        styles.card,
-        { backgroundColor:  '#FFFFFF' },
+        styles.card
         style,
       ]}
     >

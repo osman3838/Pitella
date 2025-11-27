@@ -1,7 +1,7 @@
 import { useTheme } from '@/hooks/useTheme';
 import Icon from '@/icons';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Link } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,28 +9,30 @@ import { AppText } from '../ui/AppText';
 
 export default function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+
   const { colors } = useTheme();
+  const pathname = usePathname().replace("/", "");
 
   return (
     <View style={[s.wrap, { paddingBottom: insets.bottom }]}>
       <View style={s.bar}>
         <Link href="/(app)/home" asChild>
           <Pressable style={s.item}>
-            <Icon name="Home" size={32} color={colors.surface} />
+            <Icon name="Home" size={32} color={pathname == "home" ? colors.secondary : colors.surface} />
             <AppText size={7}>Ev</AppText>
           </Pressable>
         </Link>
 
         <Link href="/(app)/campaigns" asChild>
           <Pressable style={s.item}>
-            <Icon name="Campains" size={32} color={colors.surface} />
+            <Icon name="Campains" size={32} color={pathname == "campaigns" ? colors.secondary : colors.surface} />
             <AppText size={7}>Kampanyalar</AppText>
           </Pressable>
         </Link>
 
         <Link href="/(app)/pay" asChild>
           <Pressable style={s.item}>
-            <Icon name="Barcode" size={30} color={colors.surface} />
+            <Icon name="Barcode" size={30} color={pathname == "pay" ? colors.secondary : colors.surface} />
             <AppText size={7}>Öde</AppText>
           </Pressable>
         </Link>
@@ -38,7 +40,7 @@ export default function BottomBar({ state, descriptors, navigation }: BottomTabB
         {/* MACHINES / LOCATIONS */}
         <Link href="/(app)/automat" asChild>
           <Pressable style={s.item}>
-            <Icon name="Location" size={32} color={colors.surface} />
+            <Icon name="Location" size={32} color={pathname == "automat" ? colors.secondary : colors.surface} />
             <AppText size={7}>Otomatlar</AppText>
           </Pressable>
         </Link>
@@ -46,7 +48,7 @@ export default function BottomBar({ state, descriptors, navigation }: BottomTabB
         {/* PROFILE */}
         <Link href="/(app)/profile" asChild>
           <Pressable style={s.item}>
-            <Icon name="Profile" size={32} color={colors.surface} />
+            <Icon name="Profile" size={32} color={pathname == "profile" ? colors.secondary : colors.surface} />
             <AppText size={7}>Hesabım</AppText>
           </Pressable>
         </Link>

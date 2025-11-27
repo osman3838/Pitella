@@ -13,7 +13,8 @@ export default function ChipGroup({ items }: { items: SectionChip[] }) {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={s.row}
+      style={s.container}              // 👈 genişliği burada kısıtlıyoruz
+      contentContainerStyle={s.row}    // 👈 sadece layout & gap
     >
       {items.map(ch => {
         const active = !!ch.active;
@@ -22,27 +23,31 @@ export default function ChipGroup({ items }: { items: SectionChip[] }) {
           <Pressable key={ch.key} onPress={ch.onPress}>
             <View
               style={[
-                s.chip,
+                s.chipBase,
                 active ? s.chipActive : s.chipInactive,
               ]}
             >
-              {ch.icon && (
-                <View style={[s.iconWrapper, active ? s.iconWrapperActive : s.iconWrapperInactive]}>
+              <View
+                style={[
+                  s.iconWrapper,
+                  active ? s.iconWrapperActive : s.iconWrapperInactive,
+                ]}
+              >
+                {ch.icon && (
                   <Icon
                     name={ch.icon as any}
-                    size={20}
-                    color={active ? colors.primary : colors.text}
+                    size={18}
+                    color={active ? colors.primary : colors.danger}
                   />
-                </View>
-              )}
+                )}
+              </View>
 
               <AppText
-                size={12}
-                weight='semiBold'
-
+                size={9}
+                weight="semiBold"
                 style={[
                   s.label,
-                  ch.icon ? s.labelWithIcon : null,
+                  active ? s.labelActive : s.labelInactive,
                 ]}
                 numberOfLines={2}
               >
@@ -58,45 +63,69 @@ export default function ChipGroup({ items }: { items: SectionChip[] }) {
 
 const styles = (colors: any) =>
   StyleSheet.create({
-    row: {
-      gap: 8,
-      paddingHorizontal: 12,
+    // ScrollView’in kendisi → alanı daraltıyoruz
+    container: {
+      width: '65%',
+      alignSelf: 'flex-end', // gerekiyorsa
     },
-    chip: {
+
+    // İçerik → sadece satır düzeni
+    row: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderRadius: 24,
-      paddingHorizontal: 10,
-      width:"75%",
-      paddingVertical: 8,
+      columnGap: 6,
+      paddingRight: 12,
+      paddingLeft: 2,
     },
+
+    chipBase: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: 999,
+      paddingVertical: 4,
+      paddingHorizontal: 4,
+      alignSelf: 'flex-start',
+      minHeight: 32,
+      overflow: 'hidden',
+    },
+
     chipActive: {
-      backgroundColor: colors.gray, // aktif olanda arka plan dolu
-      
+      backgroundColor: '#EDEDED',
     },
+
     chipInactive: {
       backgroundColor: 'transparent',
     },
+
     iconWrapper: {
-      width: 28,
-      height: 28,
-      borderRadius: 30,
+      width: 30,
+      height: 30,
+      borderRadius: 23,
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: 6,
+      marginRight: 3,
+      overflow: 'hidden',
     },
+
     iconWrapperActive: {
-      backgroundColor: 'white', // aktif olanda ikon beyaz yuvarlak içinde
+      backgroundColor: 'white',
     },
+
     iconWrapperInactive: {
-      backgroundColor: 'transparent',
+      backgroundColor: 'white',
     },
+
     label: {
-      maxWidth: 90,
-      fontWeight: '600',
-      lineHeight:11
+      maxWidth: 54,
+      lineHeight: 11,
+      flexShrink: 1,
     },
-    labelWithIcon: {
-      // ikon varsa zaten marginRight iconWrapper’dan geliyor
+
+    labelActive: {
+      color: colors.text,
+    },
+
+    labelInactive: {
+      color: colors.danger,
     },
   });

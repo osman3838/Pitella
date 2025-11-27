@@ -56,7 +56,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 24,
+    marginTop:30
   },
   textWrap: {
     flex: 1,

@@ -71,8 +71,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 32,
     borderRadius: 999,
-    justifyContent: 'center',
-    alignItems: 'center',
     minWidth: 120,
   },
   disabledButton: {

@@ -68,6 +68,7 @@ export default function AppLayout() {
         <Stack.Screen
           name="automat"
           options={{
+            
             header: () => <Header  />,
           }}
         />
@@ -80,7 +81,11 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
-        name="campaigns" />
+          name="campaigns"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       {showBottomBar && <BottomBar />}

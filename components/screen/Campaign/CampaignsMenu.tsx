@@ -38,13 +38,11 @@ export default function CampaignsMenu({
 
   return (
     <View style={s.container}>
-      {/* Menü kartı */}
       <SettingsCard
         items={items}
         style={s.menuCard}
       />
 
-      {/* Çıkış butonu */}
       <Pressable
         style={[
           s.logoutBtn,

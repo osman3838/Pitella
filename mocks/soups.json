@@ -8,6 +8,7 @@
     "tags": ["veg"],
     "image": "https://picsum.photos/id/101/600/400"
   },
+  
   {
     "id": 2,
     "title": "Ezogelin Çorbası",
@@ -27,6 +28,24 @@
     "image": "https://picsum.photos/id/300/600/400"
   },
   {
+    "id": 4,
+    "title": "İşkembe Çorbası",
+    "subtitle": "Bol sarımsaklı",
+    "rating": { "value": 4.1, "count": 90 },
+    "price": 55,
+    "tags": ["meat"],
+    "image": "https://picsum.photos/id/400/600/400"
+  },
+   {
+    "id": 4,
+    "title": "İşkembe Çorbası",
+    "subtitle": "Bol sarımsaklı",
+    "rating": { "value": 4.1, "count": 90 },
+    "price": 55,
+    "tags": ["meat"],
+    "image": "https://picsum.photos/id/400/600/400"
+  },
+   {
     "id": 4,
     "title": "İşkembe Çorbası",
     "subtitle": "Bol sarımsaklı",

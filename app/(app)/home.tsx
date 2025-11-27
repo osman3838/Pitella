@@ -58,6 +58,11 @@ export default function Home() {
           title="Çorbalar"
           chips={[
             { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
 
           ]}
           data={mocks.soups}
