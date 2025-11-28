@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    overflow: 'hidden',
   },
   box: {
     width: 58,
@@ -166,7 +165,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1.5,
     backgroundColor: '#fff',
-    overflow: 'hidden',
     fontSize: 22,
     fontWeight: '700',
   },

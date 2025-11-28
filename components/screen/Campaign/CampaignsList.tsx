@@ -56,6 +56,7 @@ export default function CampaignsList({ campaigns }: CampaignsListProps) {
 const s = StyleSheet.create({
   container: {
     marginBottom: 24,
+    marginTop:24,
   },
   title: {
     marginBottom: 12,

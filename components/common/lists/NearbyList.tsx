@@ -1,3 +1,4 @@
+import { AppButton } from '@/components/ui/AppButton';
 import type { NearbySiteDTO } from '@/types/dto/otomat';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -26,6 +27,7 @@ export default function NearbyList({
             : s.address || s.city || 'Otomat';
 
         return (
+          <View> 
           <Pressable
             key={s.site_id}
             onPress={() => onPressItem?.(s)}
@@ -69,6 +71,8 @@ export default function NearbyList({
               </Text>
             </Pressable>
           </Pressable>
+          
+          </View>
         );
       })}
     </View>

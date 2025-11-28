@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import CampaignsHeader from './CampaignsHeader';
 import CampaignsList from './CampaignsList';
 import CampaignsMenu from './CampaignsMenu';
@@ -26,5 +26,5 @@ export default function CampaignsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F3F3F3' },
-  content: { paddingHorizontal: 16, paddingVertical: 24 },
+  content: { paddingHorizontal: 26, paddingVertical: 24,paddingBottom:50 },
 });

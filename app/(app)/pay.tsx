@@ -24,24 +24,23 @@ export default function PayScreen() {
 
   return (
     <View style={s.container}>
-      {/* Normal sayfa içeriği */}
       <View style={s.content}>
         <ScanHeader />
 
-        {/* QR kapalıyken placeholder kutu */}
-        {!showCamera && (
-          <View style={s.scannerArea}>
-            <ScanBox
-              showCamera={false}
-              state={state}
-              hasPermission={hasPermission}
-              onScan={handleScan}
-              torchEnabled={torchEnabled}
-              onToggleTorch={toggleTorch}
-            />
-          </View>
-        )}
+        {/* Ortada daha kompakt kare kutu */}
+        <View style={s.scannerWrapper}>
+          <ScanBox
+            showCamera={false}
+            state={state}
+            hasPermission={hasPermission}
+            onScan={handleScan}
+            torchEnabled={torchEnabled}
+            onToggleTorch={toggleTorch}
+            onClose={closeScanner}
+          />
+        </View>
 
+        {/* Alt kısım scroll edilebilir kontroller */}
         <ScrollView
           style={s.controlsScroll}
           contentContainerStyle={s.controlsContent}
@@ -49,23 +48,28 @@ export default function PayScreen() {
         >
           <ScanControls
             state={state}
-            onRequestPermissionAgain={requestAgain}
+            hasPermission={hasPermission}
             onOpenScanner={openScanner}
+            onRequestPermission={requestAgain}
+            torchEnabled={torchEnabled}
+            onToggleTorch={toggleTorch}
           />
         </ScrollView>
       </View>
 
       {/* QR AÇIKKEN: EKRANI %100 KAPLAYAN OVERLAY */}
       {showCamera && (
-        <ScanBox
-          showCamera={true}
-          state={state}
-          hasPermission={hasPermission}
-          onScan={handleScan}
-          torchEnabled={torchEnabled}
-          onToggleTorch={toggleTorch}
-          onClose={closeScanner}
-        />
+        <View style={s.cameraOverlay}>
+          <ScanBox
+            showCamera={true}
+            state={state}
+            hasPermission={hasPermission}
+            onScan={handleScan}
+            torchEnabled={torchEnabled}
+            onToggleTorch={toggleTorch}
+            onClose={closeScanner}
+          />
+        </View>
       )}
     </View>
   );
@@ -76,23 +80,32 @@ const styles = (t: ReturnType<typeof useTheme>) =>
     container: {
       flex: 1,
       backgroundColor: t.colors.background,
-      // DİKKAT: BURADA PADDING YOK
     },
     content: {
       flex: 1,
       paddingHorizontal: t.spacing.lg,
       paddingTop: t.spacing.lg,
     },
-    scannerArea: {
-      width: '100%',
-      aspectRatio: 1,
+    scannerWrapper: {
       marginTop: t.spacing.lg,
       marginBottom: t.spacing.lg,
+      alignSelf: 'center',
+      width: '100%',
+      maxWidth: 320,
+      aspectRatio: 1, // kare kutu, ekranı saçma uzatmıyor
     },
     controlsScroll: {
       flex: 1,
     },
     controlsContent: {
-      paddingBottom: 120,
+      paddingBottom: 32,
+    },
+    cameraOverlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: t.colors.background,
     },
   });

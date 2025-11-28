@@ -124,7 +124,6 @@ const s = StyleSheet.create({
 
   cta: {
     marginTop: 10,
-    paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: '#ffffff',
     borderRadius: 10,

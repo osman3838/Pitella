@@ -4,11 +4,7 @@ import { useMeQuery } from '@/redux/api/auth.api';
 import { useAppSelector } from '@/redux/hooks';
 import { Redirect, Stack, usePathname } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
-
-const BOTTOM_HIDDEN_ROUTES = [
-
-];
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 export default function AppLayout() {
   const token = useAppSelector((s) => s.session.accessToken);
@@ -19,76 +15,102 @@ export default function AppLayout() {
 
   if (isFetching && !isSuccess) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.loaderRoot}>
         <ActivityIndicator />
       </View>
     );
   }
 
-  const showBottomBar = !BOTTOM_HIDDEN_ROUTES.includes(pathname);
+  // campaigns ekranında bottom bar gizle
+  const showBottomBar = !pathname.startsWith('/campaigns');
 
   return (
-    <>
-      <Stack
-        initialRouteName="checkout"
-        screenOptions={{
-          headerTitleAlign: 'center',
-        }}
-      >
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            header: () => <Header />,
+    <View style={styles.root}>
+      <View style={styles.appContainer}>
+        <Stack
+          initialRouteName="checkout"
+          screenOptions={{
+            headerTitleAlign: 'center',
           }}
-        />
+        >
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              header: () => <Header />,
+            }}
+          />
 
-        <Stack.Screen
-          name="home"
-          options={{
-            title: 'Anasayfa',
-            header: () => <Header  />,
-          }}
-        />
+          <Stack.Screen
+            name="home"
+            options={{
+              title: 'Anasayfa',
+              header: () => <Header />,
+            }}
+          />
 
-        <Stack.Screen
-          name="pay"
-          options={{
-            title: 'Ödeme',
-            headerShown: false,
-          }}
-        />
+          <Stack.Screen
+            name="pay"
+            options={{
+              title: 'Ödeme',
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          name="profile"
-          options={{
-            title: 'Profil',
-            header: () => <Header />,
-          }}
-        />
-        <Stack.Screen
-          name="automat"
-          options={{
-            
-            header: () => <Header  />,
-          }}
-        />
+          <Stack.Screen
+            name="profile"
+            options={{
+              title: 'Profil',
+              header: () => <Header />,
+            }}
+          />
 
-        <Stack.Screen
-          name="checkout"
-          options={{
-            title: 'Çorba Kodu',
-            header: () => <Header  />,
-          }}
-        />
-        <Stack.Screen
-          name="campaigns"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
+          <Stack.Screen
+            name="automat"
+            options={{
+              header: () => <Header />,
+            }}
+          />
 
-      {showBottomBar && <BottomBar />}
-    </>
+          <Stack.Screen
+            name="checkout"
+            options={{
+              title: 'Çorba Kodu',
+              header: () => <Header />,
+            }}
+          />
+
+          <Stack.Screen
+            name="campaigns"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+
+        {showBottomBar && <BottomBar />}
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    paddingVertical: 12,
+  },
+  appContainer: {
+    flex: 1,
+    maxWidth: 480,            // tablet / büyük ekranda ortalanmış dar alan
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    overflow: 'hidden',       // köşeler düzgün görünsün
+  },
+  loaderRoot: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ECECEC',
+  },
+});

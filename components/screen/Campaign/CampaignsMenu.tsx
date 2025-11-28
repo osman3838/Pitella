@@ -60,7 +60,7 @@ export default function CampaignsMenu({
 
 const s = StyleSheet.create({
   container: {
-    marginBottom: 60,
+    paddingBottom:0,
   },
   menuCard: {
     marginBottom: 38,
@@ -68,7 +68,7 @@ const s = StyleSheet.create({
   logoutBtn: {
     alignSelf: 'center',
     paddingHorizontal: 32,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: 999,
     borderWidth: 1,
   },

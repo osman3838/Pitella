@@ -2,8 +2,8 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { CampaignHeader } from './CampaignHeader';
 import type { HomeCampaignSectionProps } from '@/types/features/home/Campaign';
+import { CampaignHeader } from './CampaignHeader';
 import { CampaignList } from './CampaignList';
 
 const CampaignSectionComponent: React.FC<HomeCampaignSectionProps> = ({
@@ -26,7 +26,6 @@ export const CampaignSection = memo(CampaignSectionComponent);
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 16,
   },

@@ -7,14 +7,15 @@ import * as FoodCard from './food_card';
 import * as Profile from './profile';
 import * as İnput from './input';
 import * as Category from "./category"
-
+import * as SSS from "./sss"
 export const ICONS = {
   ...Social,
   ...Navigation,
   ...FoodCard,
   ...Profile,
   ...İnput,
-  ...Category
+  ...Category,
+  ...SSS
 } as const;
 
 export type IconName = keyof typeof ICONS;
@@ -32,5 +33,6 @@ export * from './food_card';
 export * from './profile';
 export * from "./input";
 export * from "./category";
+export * from "./sss";
 
 

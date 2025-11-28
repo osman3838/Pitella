@@ -4,10 +4,10 @@
 import { Link } from 'expo-router';
 import React, { useMemo, useRef, useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    View
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View
 } from 'react-native';
 
 import AuthLayout from '@/components/layout/AuthLayout';
@@ -15,6 +15,7 @@ import { AppButton } from '@/components/ui/AppButton';
 import { AppText } from '@/components/ui/AppText';
 import { useTheme } from '@/hooks/useTheme';
 
+import { StyleSheet } from 'react-native';
 // OTP bileşeni ve tipleri
 import OTPInput from '@/components/ui/OTPInput';
 import { OTPInputRef } from '@/types';
@@ -36,7 +37,7 @@ export default function ForgotCode() {
       footer={
         <AppText align="center" color={colors.mutedText}>
           Şifreyi hatırladın mı?{' '}
-          <Link href="/(auth)/forgot-code" style={{ color: colors.mutedText }}>
+          <Link href="/(auth)/login" style={{ color: colors.mutedText }}>
             Giriş Yap
           </Link>
         </AppText>
@@ -69,14 +70,11 @@ export default function ForgotCode() {
               <OTPInput
                 ref={otpRef}
                 length={CODE_LEN}
+                boxStyle={styles.otpBox}
                 value={code}
                 onChangeText={setCode}
                 // onComplete={(full) => { /* istersen burada butonsuz submit */ }}
                 keyboardType="number-pad"
-                containerStyle={{ flexDirection: 'row', justifyContent: 'center', columnGap: 12 }}
-                boxStyle={[
-                  { borderColor: 'rgba(0,0,0,0.08)', backgroundColor: '#fff', color: colors.text },
-                ]}
                 gap={12}
               />
             </View>
@@ -115,4 +113,32 @@ export default function ForgotCode() {
     </AuthLayout>
   );
 }
-
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 24,
+    alignItems: 'center',
+  },
+  helper: {
+    marginTop: 4,
+    opacity: 0.7,
+  },
+  inputWrapper: {
+    marginTop: 32,
+  },
+  otpBox: {
+    width: 52,
+    height: 72,
+    borderRadius: 18,
+    borderWidth: 0,
+    backgroundColor: '#FFFFFF',
+    textAlignVertical: 'center',
+    fontSize: 32,
+    fontWeight: '700',
+    // shadow (Android + iOS)
+    elevation: 4,
+    shadowColor: '#00000022',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+  },
+});

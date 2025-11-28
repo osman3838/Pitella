@@ -1,6 +1,7 @@
 import { AppText } from '@/components/ui/AppText';
 import StatCard from '@/components/ui/cards/StatCards/StatCard';
 import { useTheme } from '@/hooks/useTheme';
+import Icon from '@/icons';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -22,16 +23,16 @@ export default function CampaignsStats({ stats }: CampaignsStatsProps) {
       </View>
 
       <View style={s.cardsRow}>
-        <View style={{flex:1}}>
-                <AppText size={14} weight="medium">
-          Puanlarım <AppText size={14}>★</AppText>
+        <View style={{flex:1,display:"flex",gap:10}} >
+                <AppText  size={14} weight="medium">
+          Puanlarım <Icon name='Review' size={14} color={colors.yellow}/>
         </AppText>
 
         <StatCard value={stats.points} />
         </View>
-        <View style={{flex:1}}>
+        <View style={{flex:1,display:"flex",gap:10}}>
   <AppText size={14} weight="medium">
-          Favoriler <AppText size={14} color="#8257E5">★</AppText>
+          Favoriler <Icon name="Review" size={14} color='#8257E5'/>
         </AppText>
         <StatCard value={stats.favorites} />
         </View>

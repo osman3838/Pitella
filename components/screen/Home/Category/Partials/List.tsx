@@ -17,7 +17,7 @@ export default function List<T>({
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      contentContainerStyle={[{ paddingVertical: 8, gap: 10 }, contentContainerStyle]}
+      contentContainerStyle={[{ gap: 10 }, contentContainerStyle]}
     />
   );
 }

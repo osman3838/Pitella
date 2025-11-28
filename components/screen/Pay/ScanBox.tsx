@@ -2,6 +2,7 @@ import { useTheme } from '@/hooks/useTheme';
 import Icon from '@/icons';
 import type { ScanBoxProps } from '@/types/components/qrScannerTypes';
 import { CameraView } from 'expo-camera';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -55,6 +56,7 @@ export default function ScanBox(props: ScanBoxProps) {
   // FULLSCREEN OVERLAY
   return (
     <View style={s.fullscreen}>
+      <StatusBar style="light"/>
       <CameraView
         facing="back"
         style={StyleSheet.absoluteFillObject}
@@ -88,7 +90,6 @@ export default function ScanBox(props: ScanBoxProps) {
 
 const styles = (t: ReturnType<typeof useTheme>) =>
   StyleSheet.create({
-    // EKRANI %100 KAPLAYAN OVERLAY
     fullscreen: {
       ...StyleSheet.absoluteFillObject,
       zIndex: 999,
@@ -147,7 +148,7 @@ const styles = (t: ReturnType<typeof useTheme>) =>
 
     torchButton: {
       position: 'absolute',
-      bottom: 50,
+      bottom: 120,
       alignSelf: 'center',
       paddingHorizontal: 16,
       paddingVertical: 8,

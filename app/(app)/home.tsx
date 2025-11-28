@@ -78,7 +78,6 @@ const styles = (t: ReturnType<typeof useTheme>) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: t.spacing.lg,
       paddingTop: t.spacing.xl,
     },
     content: {

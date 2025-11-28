@@ -1,13 +1,20 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-export const CampaignHeader: React.FC = () => {
+type CampaignHeaderProps = {
+  onPressNext?: () => void;
+};
+
+export const CampaignHeader: React.FC<CampaignHeaderProps> = ({ onPressNext }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Kampanyalar</Text>
 
-      {/* Sağdaki yuvarlak + buton (şimdilik dummy) */}
-      <Pressable style={styles.iconButton} hitSlop={8} onPress={() => {}}>
+      <Pressable
+        style={styles.iconButton}
+        hitSlop={8}
+        onPress={onPressNext}
+      >
         <Text style={styles.iconText}>＋</Text>
       </Pressable>
     </View>

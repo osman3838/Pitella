@@ -58,7 +58,7 @@ const s = StyleSheet.create({
     justifyContent:"space-between",
 
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 17,
     marginBottom: 12,
   },
   button: {
