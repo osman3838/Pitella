@@ -1,5 +1,5 @@
-import { useNearbyStatus } from '@/hooks/useNearbyStatus';
-import React from 'react';
+// src/components/pages/automat/MapCard.tsx
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -7,14 +7,21 @@ import {
   View,
 } from 'react-native';
 
-
 import { useNearby } from '@/hooks/useNearby';
 import type { NearbySiteDTO } from '@/types/dto/otomat';
 
 import NearbyList from '@/components/common/lists/NearbyList';
 import { RadiusMap } from '@/components/common/maps/RadiusMap';
 import { useLocationLabels } from '@/hooks/useLocationLabels';
+import { useNearbyStatus } from '@/hooks/useNearbyStatus';
 import type { RadiusMarker } from '@/types';
+
+import { FilterDropdown } from '@/components/common/maps/FilterDropdown';
+import { AppText } from '@/components/ui/AppText';
+import {
+  NEARBY_FILTERS,
+  type NearbyFilterId,
+} from '@/config/nearbyFilters';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyCzj-3xo-m1JYvyB63JTOcX1ZQi5iwWtf8';
 
@@ -27,12 +34,21 @@ export default function MapCard() {
 
   const sites = (data ?? []) as NearbySiteDTO[];
 
+  // Aktif filtre (şimdilik sadece UI, filtreleme mantığını istersek ayrı yazarız)
+  const [activeFilter, setActiveFilter] = useState<NearbyFilterId>('all');
+
+  // ---------------------------------------------------------------------------
+  // KONUM LABEL'LERİ (şehir / ilçe / mahalle)
+  // ---------------------------------------------------------------------------
   const { regionLabel, subRegionLabel } = useLocationLabels(coords, {
     apiKey: GOOGLE_MAPS_API_KEY,
     language: 'tr',
     fallbackLabel: 'Konumun çevresi',
   });
 
+  // ---------------------------------------------------------------------------
+  // DURUM METNİ (hook ile)
+  // ---------------------------------------------------------------------------
   const statusText = useNearbyStatus({
     coords,
     error,
@@ -41,6 +57,9 @@ export default function MapCard() {
     count: sites.length,
   });
 
+  // ---------------------------------------------------------------------------
+  // LOADING STATE (KOORDİNAT YOKKEN)
+  // ---------------------------------------------------------------------------
   if (!coords) {
     return (
       <View style={styles.wrapper}>
@@ -52,6 +71,9 @@ export default function MapCard() {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // DATA → MARKERS
+  // ---------------------------------------------------------------------------
   const markers: RadiusMarker[] = sites.map((s, index) => ({
     id: s.site_id,
     lat: parseFloat(s.lat),
@@ -61,8 +83,28 @@ export default function MapCard() {
     isActive: index === 0,
   }));
 
+  
   return (
     <View style={styles.wrapper}>
+      
+      <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",marginBottom:5}}> 
+      
+      <View >
+
+        <AppText
+          weight="semiBold"
+          size={17}
+        >
+          Yakındaki Otomatlar
+        </AppText>
+      </View>
+          <FilterDropdown
+            filters={NEARBY_FILTERS}
+            activeFilter={activeFilter}
+            onChange={setActiveFilter}
+          />
+
+           </View>
       <View style={styles.card}>
         <RadiusMap
           coords={coords}
@@ -80,6 +122,7 @@ export default function MapCard() {
           )}
         </View>
 
+
         <Text style={styles.status}>{statusText}</Text>
       </View>
 
@@ -88,22 +131,15 @@ export default function MapCard() {
   );
 }
 
-// -----------------------------------------------------------------------------
-// STYLES
-// -----------------------------------------------------------------------------
 const styles = StyleSheet.create({
   wrapper: {
-    padding: 10,
-    backgroundColor: '#f7f7f7',
     borderRadius: 12,
   },
 
   card: {
-    // height: 0,  ← bunu yaparsan hiçbir şey göremezsin, kaldırıyoruz
     borderRadius: 16,
     marginBottom: 10,
-    position: 'relative',
-    backgroundColor: 'transparent', // arkaplanı kaldırdın
+    backgroundColor: 'transparent',
     overflow: 'visible',
   },
 
@@ -140,11 +176,17 @@ const styles = StyleSheet.create({
   status: {
     position: 'absolute',
     left: 0,
-    bottom: 65,
+    bottom:65,
     fontSize: 13,
     fontWeight: '700',
     color: '#000',
     paddingHorizontal: 6,
     paddingVertical: 2,
+  },
+
+  filterWrapper: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
   },
 });

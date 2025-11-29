@@ -46,7 +46,7 @@ export default function Carousel<T>({
 
   // Kartın gerçek genişliği (2 kart + aradaki gap = containerWidth)
   const cardWidth = useMemo(
-    () => itemWidth ?? Math.round((containerWidth - gap) / 2),
+    () => itemWidth ?? Math.round((containerWidth - gap) / 1.8) ,
     [itemWidth, containerWidth, gap],
   );
 

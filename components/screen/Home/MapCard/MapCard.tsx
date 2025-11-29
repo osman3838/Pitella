@@ -133,14 +133,12 @@ export default function MapCard() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#f7f7f7',
     borderRadius: 12,
   },
 
   card: {
     borderRadius: 16,
     marginBottom: 10,
-    position: 'relative',
     backgroundColor: 'transparent',
     overflow: 'visible',
   },
@@ -177,8 +175,8 @@ const styles = StyleSheet.create({
 
   status: {
     position: 'absolute',
-    left: 8,
-    bottom: 8,
+    left: 0,
+    bottom:65,
     fontSize: 13,
     fontWeight: '700',
     color: '#000',

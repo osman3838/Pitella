@@ -4,6 +4,7 @@ import Icon from '@/icons';
 import type { FoodCardProps } from '@/types';
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { AppButton } from '../../AppButton';
 
 export default function FoodCard({
   image,
@@ -143,25 +144,38 @@ export default function FoodCard({
 
             <View style={{ flex: 1 }} />
 
-            <Pressable
-              hitSlop={8}
-              onPress={actions.find(a => a.key === 'buy')?.onPress}
-            >
-              <AppText size={12} color="gray">
-                Satın Al
-              </AppText>
-            </Pressable>
+            {/* Satın Al butonu */}
+<AppButton
+  size="sm"
+  variant="ghost"
+  hitSlop={8}
+  dimOnPress
+  onPress={actions.find(a => a.key === 'buy')?.onPress}
+  style={{
+    borderWidth: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    backgroundColor: 'transparent',
+  }}
+>
+  <AppText size={12} color="gray">
+    Satın Al
+  </AppText>
+</AppButton>
 
-            <Pressable
-              onPress={actions.find(a => a.key === 'add')?.onPress}
-              style={[
-                s.addBtn,
-                { backgroundColor: colors.accent },
-              ]}
-              hitSlop={8}
-            >
-              <Icon name="Plus" size={40} color="white" /> {/* küçültüldü */}
-            </Pressable>
+{/* + butonu */}
+<AppButton
+  size="sm"
+  variant="ghost"
+  bgColor={colors.accent}
+  round
+  hitSlop={8}
+  onPress={actions.find(a => a.key === 'add')?.onPress}
+  style={s.addBtn}
+>
+  <Icon name="Plus" size={30} color="white" />
+</AppButton>
+
           </View>
         )}
       </View>

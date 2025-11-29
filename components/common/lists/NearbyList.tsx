@@ -1,7 +1,13 @@
+// components/nearby/NearbyList.tsx
+
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+
 import { AppButton } from '@/components/ui/AppButton';
+import { AppText } from '@/components/ui/AppText';
+import { useTheme } from '@/hooks/useTheme';
+import Icon from '@/icons';
 import type { NearbySiteDTO } from '@/types/dto/otomat';
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export type NearbyListProps = {
   sites: NearbySiteDTO[];
@@ -16,99 +22,254 @@ export default function NearbyList({
   onPressItem,
   highlightFirst = true,
 }: NearbyListProps) {
+  const t = useTheme();
+  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+
   return (
-    <View style={{ gap: 6 }}>
-      {sites.map((s, i) => {
-        const isActive = highlightFirst && i === 0;
+    <View style={styles.wrapper}>
+      {/* ÜST BAR ------------------------------------------------------ */}
 
-        const name =
-          s.address?.startsWith('Koordinat') && s.city
-            ? s.city
-            : s.address || s.city || 'Otomat';
-
-        return (
-          <View> 
-          <Pressable
-            key={s.site_id}
-            onPress={() => onPressItem?.(s)}
-            style={[
-              styles.row,
-              isActive ? styles.rowActive : styles.rowInactive,
-            ]}
+      {/* ROTA / QR KOLON BAŞLIĞI (ikonlar) --------------------------- */}
+      <View style={styles.headerRow}>
+        {/* solda liste hücresine denk gelen boş alan */}
+        <View style={styles.headerLeftSpacer} />
+        {/* Harita / Liste pill butonları */}
+        <View style={{flexDirection:"row",gap:5}}>
+          <AppButton
+            size="sm"
+            variant="ghost"
+            bgColor={viewMode === 'map' ? '#00D9FF' : '#CFF6FF'}
+            borderColor="transparent"
+            round
+            onPress={() => setViewMode('map')}
+            style={styles.segmentButton}
           >
-            <Text
-              style={[
-                styles.rowName,
-                isActive && styles.rowNameActive,
-              ]}
-              numberOfLines={1}
+            <AppText
+              weight="semiBold"
+              size={15}
+              align="center"
+              color="#000"
             >
-              {name}
-            </Text>
+              Harita
+            </AppText>
+          </AppButton>
 
-            {typeof s.distance_km === 'number' && (
-              <Text style={styles.rowDistance}>
-                {s.distance_km.toFixed(1)} km
-              </Text>
-            )}
-
-            <Pressable
-              onPress={() => onPressRoute?.(s)}
-              style={[
-                styles.routeBtn,
-                isActive ? styles.routeBtnActive : styles.routeBtnInactive,
-              ]}
+          <AppButton
+            size="md"
+            variant="ghost"
+            bgColor={viewMode === 'list' ? '#00D9FF' : '#CFF6FF'}
+            borderColor="transparent"
+            round
+            onPress={() => setViewMode('list')}
+            style={styles.segmentButton}
+          >
+            <AppText
+              weight="semiBold"
+              size={16}
+              align="center"
+              color="#000"
             >
-              <Text
+              Liste
+            </AppText>
+          </AppButton>
+        </View>
+
+
+        {/* Rota ikon hücresi */}
+
+        <View style={{flexDirection:"row",marginHorizontal:11,justifyContent:"space-between"}}>
+        <View style={styles.headerIconCell}>
+          <Icon name="Location" size={32} color={t.colors.mutedText ?? '#B8B8B8'} />
+        </View>
+
+        {/* QR ikon hücresi */}
+        <View style={styles.headerIconCell}>
+          <Icon name="Barcode" size={32} color={t.colors.mutedText ?? '#B8B8B8'} />
+        </View>
+          </View>
+      </View>
+
+      {/* LİSTE -------------------------------------------------------- */}
+      <View style={{ gap: 8, marginTop: 8 }}>
+        {sites.map((s, i) => {
+          const isActive = highlightFirst && i === 0;
+
+          const name =
+            s.address?.startsWith('Koordinat') && s.city
+              ? s.city
+              : s.address || s.city || 'Otomat';
+
+          return (
+            <View key={s.site_id} style={styles.row}>
+              {/* SOL BÜYÜK HÜCRE: İSİM + MESAFE */}
+              <View style={{flex:1.5}}>
+              <Pressable
+                onPress={() => onPressItem?.(s)}
                 style={[
-                  styles.routeText,
-                  isActive
-                    ? styles.routeTextActive
-                    : styles.routeTextInactive,
+                  styles.mainCell,
+                  isActive ? styles.cellActive : styles.cellInactive,
                 ]}
               >
-                Rota
-              </Text>
-            </Pressable>
-          </Pressable>
-          
-          </View>
-        );
-      })}
+                <AppText
+                  weight="semibold"
+                  size={14}
+                  numberOfLines={1}
+                  color={isActive ? '#FFFFFF' : '#666666'}
+                >
+                  {name}
+                </AppText>
+
+                {typeof s.distance_km === 'number' && (
+                  <View
+                    style={[
+                      styles.distanceBadge,
+                      isActive
+                        ? styles.distanceBadgeActive
+                        : styles.distanceBadgeInactive,
+                    ]}
+                  >
+                    <AppText
+                      weight="bold"
+                      size={12}
+                      color={isActive ? '#fff' : "black"}
+                    >
+                      {s.distance_km.toFixed(1)} km
+                    </AppText>
+                  </View>
+                )}
+              </Pressable>
+</View>
+              {/* ORTA: ROTA */}
+              <View style={{flex:1}}>
+              <AppButton
+                size="md"
+                variant="ghost"
+                bgColor={isActive ? '#FF4D00' : '#D8D8D8'}
+                borderColor="transparent"
+                style={styles.actionBtn}
+                onPress={() => onPressRoute?.(s)}
+              >
+                <AppText
+                  weight="bold"
+                  size={13}
+                  align="center"
+                  color={isActive ? '#FFFFFF' : '#F2A5A5'}
+                >
+                  Rota
+                </AppText>
+              </AppButton>
+
+</View>
+              {/* SAĞ: QR */}
+              <View style={{flex:1}}>  
+              <AppButton
+                size="md"
+                variant="ghost"
+                bgColor={isActive ? '#FF4D00' : '#D8D8D8'}
+                borderColor="transparent"
+                style={styles.actionBtn}
+                onPress={() => onPressItem?.(s)}
+              >
+                <AppText
+                  weight="bold"
+                  size={12}
+                  align="center"
+                  color={isActive ? '#FFFFFF' : '#F2A5A5'}
+                >
+                  QR
+                </AppText>
+              </AppButton>
+              </View>
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 }
 
+const CELL_RADIUS = 10;
+const ACTION_WIDTH =90;
+
 const styles = StyleSheet.create({
-  row: {
+  wrapper: {
+    gap: 8,
+  },
+
+  /* ÜST BAR */
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    justifyContent: 'flex-start',
+  },
+
+  segmentGroup: {
+    flexDirection: 'row',
+    flex:0,
+    gap: 12,
+  },
+
+  segmentButton: {
+    minWidth: 70,
+  },
+
+  /* İKONLARIN OLDUĞU HEADER ROW */
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+    gap: 8,
+  },
+  headerLeftSpacer: {
+    flex: 1,
+    borderRadius: CELL_RADIUS,
+    flexDirection:"row",
+    justifyContent:"space-around"
+
+  },
+  headerIconCell: {
+    width: ACTION_WIDTH,
+    justifyContent: 'flex-start',
+  },
+
+  /* LİSTE SATIRI */
+  row: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    gap: 8,
+  },
+
+  mainCell: {
+    flex: 1,
+    borderRadius: CELL_RADIUS,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  cellActive: {
+    backgroundColor: '#FF4D00',
+  },
+  cellInactive: {
+    backgroundColor: '#D8D8D8',
+  },
+
+  distanceBadge: {
+    borderRadius: 0,
+  },
+  distanceBadgeActive: {
+    color:"white"
+  },
+  distanceBadgeInactive: {
+    backgroundColor: '#F4F4F4',
+  },
+
+  actionBtn: {
+    width: ACTION_WIDTH,
     borderRadius: 10,
+    borderWidth: 0,
+    paddingHorizontal: 0,
   },
-
-  rowActive: { backgroundColor: '#FF6B00' },
-  rowInactive: { backgroundColor: '#e0e0e0' },
-
-  rowName: { flex: 1, color: '#000', fontWeight: '600', fontSize: 13 },
-  rowNameActive: { color: '#fff' },
-
-  rowDistance: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginRight: 8,
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#000',
-  },
-
-  routeBtn: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6 },
-  routeBtnActive: { backgroundColor: '#fff' },
-  routeBtnInactive: { backgroundColor: '#ccc' },
-
-  routeText: { fontSize: 11, fontWeight: '800' },
-  routeTextActive: { color: '#FF6B00' },
-  routeTextInactive: { color: '#555' },
 });

@@ -1,15 +1,17 @@
 import { useTheme } from '@/hooks/useTheme';
 import type { AppButtonProps, ButtonSize, ButtonVariant } from '@/types/ui/buttonTypes';
-import React, { memo, useMemo } from 'react';
-import { ActivityIndicator, Platform, Pressable, StyleSheet, View } from 'react-native';
+import React, { memo, useMemo, useRef } from 'react';
+import { ActivityIndicator, Animated, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 type Props = AppButtonProps & {
-  bgColor?: string;        // ✅ arka plan override
-  borderColor?: string;    // ✅ border override
-  labelColor?: string;     // ✅ metin/ikon rengi override (çocuk Text değilse etkisi sınırlı)
-  spinnerColor?: string;   // ✅ loader rengi
-  dimOnPress?: boolean;    // ✅ basınca opaklık efekti kapatma/açma
+  bgColor?: string;
+  borderColor?: string;
+  labelColor?: string;
+  spinnerColor?: string;
+  dimOnPress?: boolean;
 };
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const AppButton = memo((props: Props) => {
   const t = useTheme();
@@ -27,13 +29,17 @@ export const AppButton = memo((props: Props) => {
     android_ripple,
     disabled: disabledProp,
     align = 'center',
-    bgColor,              // ✅
-    borderColor: borderOverride, // ✅
-    labelColor,           // ✅
-    spinnerColor,         // ✅
-    dimOnPress = true,    // ✅
+    bgColor,
+    borderColor: borderOverride,
+    labelColor,
+    spinnerColor,
+    dimOnPress = true,
+    onPressIn,
+    onPressOut,
     ...rest
   } = props;
+
+  const opacity = useRef(new Animated.Value(1)).current;
 
   const {
     btnStyle,
@@ -43,19 +49,40 @@ export const AppButton = memo((props: Props) => {
     backgroundColor,
   } = useMemo(() => {
     const sizes: Record<ButtonSize, { pv: number; ph: number; radius: number; gap: number; minH: number }> = {
-      sm: { pv: 8,  ph: 12, radius: t.radius,        gap: 6,  minH: 36 },
-      md: { pv: 12, ph: 16, radius: t.radius * 1.25, gap: 8,  minH: 44 },
-      lg: { pv: 14, ph: 18, radius: t.radius * 1.5,  gap: 10, minH: 52 },
+      sm: { pv: 8, ph: 12, radius: t.radius, gap: 6, minH: 36 },
+      md: { pv: 12, ph: 16, radius: t.radius * 1.25, gap: 8, minH: 44 },
+      lg: { pv: 14, ph: 18, radius: t.radius * 1.5, gap: 10, minH: 52 },
     };
     const sdef = sizes[size];
 
     const palette: Record<ButtonVariant, { bg: string; border: string; defaultLabel: string }> = {
-      primary:   { bg: t.colors.primary,   border: t.colors.primary,   defaultLabel: t.colors.onPrimary ?? '#fff' },
-      secondary: { bg: t.colors.secondary, border: t.colors.secondary, defaultLabel: t.colors.onSecondary ?? '#fff' },
-      danger:    { bg: t.colors.danger,    border: t.colors.danger,    defaultLabel: '#fff' },
-      outline:   { bg: 'transparent',      border: t.colors.border,    defaultLabel: t.colors.text },
-      ghost:     { bg: 'transparent',      border: 'transparent',      defaultLabel: t.colors.text },
+      primary: {
+        bg: t.colors.primary,
+        border: t.colors.primary,
+        defaultLabel: t.colors.onPrimary ?? '#fff',
+      },
+      secondary: {
+        bg: t.colors.secondary,
+        border: t.colors.secondary,
+        defaultLabel: t.colors.onSecondary ?? '#fff',
+      },
+      danger: {
+        bg: t.colors.danger,
+        border: t.colors.danger,
+        defaultLabel: '#fff',
+      },
+      outline: {
+        bg: 'transparent',
+        border: t.colors.border,
+        defaultLabel: t.colors.text,
+      },
+      ghost: {
+        bg: 'transparent',
+        border: 'transparent',
+        defaultLabel: t.colors.text,
+      },
     };
+
     const pal = palette[variant];
 
     return {
@@ -65,19 +92,41 @@ export const AppButton = memo((props: Props) => {
       backgroundColor: bgColor ?? pal.bg,
       btnStyle: {
         minHeight: sdef.minH,
-        // round true ise kapsül; değilse block ise otomatik kapsül; aksi halde standart radius
         borderRadius: round ? 999 : block ? sdef.minH / 2 : sdef.radius,
         gap: sdef.gap,
       },
-      // not: label rengi children içindeki AppText tarafından daha iyi kontrol edilir
     };
   }, [variant, size, round, block, bgColor, borderOverride, t]);
 
   const disabled = disabledProp || loading;
 
+  const handlePressIn = (e: any) => {
+    if (dimOnPress) {
+      Animated.timing(opacity, {
+        toValue: 0.6,
+        duration: 120,
+        useNativeDriver: true,
+      }).start();
+    }
+    onPressIn?.(e);
+  };
+
+  const handlePressOut = (e: any) => {
+    if (dimOnPress) {
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 120,
+        useNativeDriver: true,
+      }).start();
+    }
+    onPressOut?.(e);
+  };
+
   return (
-    <Pressable
+    <AnimatedPressable
       {...rest}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       android_ripple={
         android_ripple ??
         (Platform.OS === 'android'
@@ -90,7 +139,7 @@ export const AppButton = memo((props: Props) => {
           : undefined)
       }
       disabled={!!disabled}
-      style={({ pressed }) => [
+      style={[
         styles.base,
         {
           backgroundColor,
@@ -103,6 +152,7 @@ export const AppButton = memo((props: Props) => {
         block && styles.block,
         btnStyle,
         style,
+        dimOnPress && { opacity },
       ]}
       accessibilityRole="button"
       accessibilityState={{ disabled: !!disabled, busy: !!loading }}
@@ -111,15 +161,14 @@ export const AppButton = memo((props: Props) => {
 
       <View style={styles.labelWrap}>
         {loading ? (
-          <ActivityIndicator size="small" color={spinnerColor ?? (labelColor ?? '#fff')} />
+          <ActivityIndicator size="small" color={spinnerColor ?? labelColor ?? '#fff'} />
         ) : (
-          // Çocuk Text değilse renge karışma; AppText kullanıyorsan labelColor’ı orada geçir
           children
         )}
       </View>
 
       {rightIcon ? <View style={styles.iconWrap}>{rightIcon}</View> : null}
-    </Pressable>
+    </AnimatedPressable>
   );
 });
 

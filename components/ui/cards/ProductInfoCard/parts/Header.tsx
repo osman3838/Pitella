@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    
   },
   name: {
     fontSize: 16,

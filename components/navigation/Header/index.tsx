@@ -18,7 +18,7 @@ export default function Header({
   const insets = useSafeAreaInsets();
   
   return (
-<View style={[{ paddingTop: Math.max(insets.top, 60) }]}>
+<View style={[{ paddingTop: Math.max(insets.top, 60),zIndex:-1 }]}>
       <View style={s.row}>
         {/* Sol slot */}
         {left && <View style={s.slot}>
@@ -45,6 +45,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    zIndex:-1,
   },
   // Sol ve sağ için sabit slot: Center gerçekten ortada kalır
   slot: {

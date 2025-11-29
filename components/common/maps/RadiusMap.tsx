@@ -18,6 +18,7 @@ import {
   NearbyFilter,
   NearbyFilterId,
 } from '@/config/nearbyFilters';
+import Icon from '@/icons';
 
 export type Coords = { lat: number; lng: number };
 
@@ -98,9 +99,7 @@ export const RadiusMap: React.FC<RadiusMapProps> = ({
 
           {/* USER LOCATION DOT */}
           <Marker coordinate={center} anchor={{ x: 0.5, y: 0.5 }}>
-            <View style={styles.userDotOuter}>
-              <View style={styles.userDotInner} />
-            </View>
+            <Icon name="Location" size={24}  />
           </Marker>
 
           {/* AUTOMAT MARKERS */}
@@ -109,12 +108,7 @@ export const RadiusMap: React.FC<RadiusMapProps> = ({
               key={m.id}
               coordinate={{ latitude: m.lat, longitude: m.lng }}
             >
-              <View
-                style={[
-                  styles.pin,
-                  m.isActive ? styles.pinActive : styles.pinInactive,
-                ]}
-              />
+          <Icon name="Location" size={24} color="#FF6B00" />
             </Marker>
           ))}
         </MapView>
@@ -148,11 +142,13 @@ export const RadiusMap: React.FC<RadiusMapProps> = ({
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
+    position:"relative"
   },
 
   mapContainer: {
     height: 220,
     borderRadius: 16,
+    position:"relative",
     overflow: 'hidden',
     backgroundColor: '#fff',
   },

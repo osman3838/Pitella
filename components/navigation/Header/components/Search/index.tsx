@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { BackHandler, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useCallback, useState } from 'react';
+import { View } from 'react-native';
 import SearchButton from './SearchButton';
 import SearchInput from './SearchInput';
 
@@ -17,7 +16,6 @@ export default function Search({
   defaultOpen = false,
   placeholder,
 }: SearchProps) {
-  const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(defaultOpen);
   const [query, setQuery] = useState('');
 
@@ -27,33 +25,24 @@ export default function Search({
     onChange?.('');
   }, [onChange]);
 
-  useEffect(() => {
-    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (open) {
-        close();
-        return true;
-      }
-      return false;
-    });
-    return () => sub.remove();
-  }, [open, close]);
-
   return (
-    <View >
-      {open ? (
-        <SearchInput
-          value={query}
-          onChangeText={(t) => {
-            setQuery(t);
-            onChange?.(t);
-          }}
-          onSubmit={(t) => onSubmit?.(t)}
-          onCancel={close}
-          placeholder={placeholder}
-        />
-      ) : (
-        <SearchButton size={20} onPress={() => setOpen(true)} />
-      )}
+    <View>
+      <SearchButton size={20} onPress={() => setOpen(true)} />
+
+      <SearchInput
+        visible={open}
+        value={query}
+        onChangeText={t => {
+          setQuery(t);
+          onChange?.(t);
+        }}
+        onSubmit={t => {
+          onSubmit?.(t);
+        }}
+        onCancel={close}
+        placeholder={placeholder}
+        autoFocus
+      />
     </View>
   );
 }
@@ -61,6 +50,3 @@ export default function Search({
 export { default as SearchButton } from './SearchButton';
 export { default as SearchInput } from './SearchInput';
 
-const styles = StyleSheet.create({
-  container: { },
-});
