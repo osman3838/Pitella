@@ -8,8 +8,8 @@ export type NearbyFilter = {
 export const NEARBY_FILTERS: NearbyFilter[] = [
   { id: 'all', label: 'Tüm Otomatlar' },
   { id: 'nearby', label: 'Yakındaki Otomatlar' },
-  { id: 'lentil', label: 'Sadece Mercimek Çorbası' },
-  { id: 'mushroom', label: 'Sadece Mantar Çorbası' },
+  { id: 'lentil', label: 'Sadece Mercimek Pizzası' },
+  { id: 'mushroom', label: 'Sadece Mantar Pizzası' },
 ];
 
 export type Automat = {

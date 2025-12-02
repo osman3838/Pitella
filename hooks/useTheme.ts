@@ -1,19 +1,19 @@
 export function useTheme() {
   return {
     colors: {
-      primary: '#193370',     
+      primary: '#f1665d',     
       secondary: '#ff5833',   
 
       background: '#ffffff',
-      yellow:"#fbae17",  
+      yellow:"#96c03d",  
       surface: '#e8e4db',  
       gray: '#e6e6e6',        
       border: '#dddddd',      
       borderDark:"#f2f2f2",
-      accent:"#C9986E",
-      primaryDark:'#0a142f',
+      accent:"#f1665d",
+      primaryDark:'#ec1c24',
       success:"#2ecc71",
-      gold:'#bd8d5f',
+      gold:'#989898',
       text: '#111111',        
       mutedText: '#6b7280',   
       danger: '#e11d48',      

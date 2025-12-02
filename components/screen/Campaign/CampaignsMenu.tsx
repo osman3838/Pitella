@@ -46,7 +46,7 @@ export default function CampaignsMenu({
       <Pressable
         style={[
           s.logoutBtn,
-          { borderColor: colors.text ?? '#222' },
+          { borderColor: colors.primaryDark },
         ]}
         onPress={onLogoutPress}
       >
@@ -70,6 +70,6 @@ const s = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 8,
     borderRadius: 999,
-    borderWidth: 1,
+    borderWidth: 2,
   },
 });

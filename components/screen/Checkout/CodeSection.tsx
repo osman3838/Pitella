@@ -16,7 +16,7 @@ export const CodeSection: React.FC<CodeSectionProps> = ({
   value,
   onChange,
   onComplete,
-  title = 'Çorba kodunu giriniz.',
+  title = 'Pizza kodunu giriniz.',
   helperText,
 }) => {
   return (

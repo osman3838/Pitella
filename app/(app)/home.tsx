@@ -22,47 +22,25 @@ export default function Home() {
         showsVerticalScrollIndicator={false}
       >
         <Hero
-          title="Günün Çorbası"
+          title="Günün Pizzası"
           subtitle="TIKLA VE ÖĞREN"
           image={Images.Home.Hero.Background}
           style={{
             radius: 40,
             height: 220,
-            foreground: [
-              {
-                src: Images.Home.Hero.Cup2,
-                style: {
-                  right: -30,
-                  bottom: -150,
-                  width: 320,
-                  height: 320,
-                  transform: [{ rotate: '-10deg' }],
-                },
-              },
-              {
-                src: Images.Home.Hero.Cup1,
-                style: {
-                  right: -70,
-                  bottom: -110,
-
-                  width: 220,
-                  height: 220,
-                  transform: [{ rotate: '-10deg' }],
-                },
-              },
-            ],
+          
           } as any}
         />
 
         <Category
-          title="Çorbalar"
+          title="Pizzalar"
           chips={[
-            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
-            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
-            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
-            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
-            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
-            { key: 'veg', label: 'Sebzeli Çorbalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Pizzalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Pizzalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Pizzalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Pizzalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Pizzalar', active: true, icon: 'Vegatable' },
+            { key: 'veg', label: 'Sebzeli Pizzalar', active: true, icon: 'Vegatable' },
 
           ]}
           data={mocks.soups}

@@ -14,7 +14,7 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
-
+import {Images} from "@/assets/index"
 import { FormTextInput } from '@/components/form/FormTextInput';
 import { AppButton } from '@/components/ui/AppButton';
 import { AppText } from '@/components/ui/AppText';
@@ -101,23 +101,11 @@ export default function Login() {
         <View style={s.header}>
           <View style={s.headerInner}>
             <Image
-              source={require('@/assets/images/soupana-cover.png')}
-              style={s.heroImg}
-              contentFit="contain"
+              source={Images.Home.Cover}
+              contentFit=''
+              style={{width:380,height:250}}
             />
-            <View style={{ marginTop: -60 }} />
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <AppText weight="bold" size={39} color="#fff">Soupana</AppText>
-              <AppText weight="medium" size={30} color={t.colors.gray} style={{ marginTop: 4 }}>
-                {' '}ile
-              </AppText>
-            </View>
-
-            <AppText weight="medium" size={18} color="#fff" align="center" style={{ lineHeight: 16 }}>
-              fırsatları <AppText color={t.colors.gold}>keşfet!</AppText>
-            </AppText>
-
-            <View style={{ marginTop: t.spacing.lg }} />
+           
           </View>
         </View>
 
@@ -269,10 +257,7 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
       justifyContent: 'center',
       gap: 6,
     },
-    heroImg: {
-      width: 250,
-      height: 250,
-    },
+
     card: {
       marginTop: -t.radius * 2,
       backgroundColor: t.colors.borderDark,

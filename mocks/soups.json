@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "title": "Mantar Çorbası",
+    "title": "Mantar Pizzası",
     "subtitle": "Hazırlanışı 2 dk",
     "rating": { "value": 4.5, "count": 120 },
     "price": 50,
@@ -11,7 +11,7 @@
   
   {
     "id": 2,
-    "title": "Ezogelin Çorbası",
+    "title": "Ezogelin Pizzası",
     "subtitle": "Acılı - Ekşili Karışım",
     "rating": { "value": 4.8, "count": 200 },
     "price": 45,
@@ -29,7 +29,7 @@
   },
   {
     "id": 4,
-    "title": "İşkembe Çorbası",
+    "title": "İşkembe Pizzası",
     "subtitle": "Bol sarımsaklı",
     "rating": { "value": 4.1, "count": 90 },
     "price": 55,
@@ -38,7 +38,7 @@
   },
    {
     "id": 4,
-    "title": "İşkembe Çorbası",
+    "title": "İşkembe Pizzası",
     "subtitle": "Bol sarımsaklı",
     "rating": { "value": 4.1, "count": 90 },
     "price": 55,
@@ -47,7 +47,7 @@
   },
    {
     "id": 4,
-    "title": "İşkembe Çorbası",
+    "title": "İşkembe Pizzası",
     "subtitle": "Bol sarımsaklı",
     "rating": { "value": 4.1, "count": 90 },
     "price": 55,

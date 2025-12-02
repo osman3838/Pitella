@@ -1,6 +1,11 @@
 
 export const Images = {
   Home: {
+    Cover:require("./images/pitella-cover.png"),
+    BottomBar:
+    {
+    Cover:require ("./images/bottombar/bottom.png"),
+    },
     Hero: {
       Background: require('./images/home/hero/background.png'),
       Cup1: require('./images/home/hero/foreground-cup1.png'),

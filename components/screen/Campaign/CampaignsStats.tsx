@@ -32,7 +32,7 @@ export default function CampaignsStats({ stats }: CampaignsStatsProps) {
         </View>
         <View style={{flex:1,display:"flex",gap:10}}>
   <AppText size={14} weight="medium">
-          Favoriler <Icon name="Review" size={14} color='#8257E5'/>
+          Favoriler <Icon name="Review" size={14} color={colors.primaryDark}/>
         </AppText>
         <StatCard value={stats.favorites} />
         </View>

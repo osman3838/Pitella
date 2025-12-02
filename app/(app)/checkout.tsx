@@ -18,13 +18,13 @@ export default function Checkout() {
   const { code, loadingPay, loadingTopUp } = useAppSelector(
     state => state.checkout,
   );
-  const product = {name:"Çorba",price:10};
+  const product = {name:"Pizza",price:10};
 
   useEffect(() => {
     if (!product) {
       dispatch(
         setProduct({
-          name: 'Çorba',
+          name: 'Pizza',
           price: 10,
         }),
       );

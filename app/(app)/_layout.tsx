@@ -74,7 +74,7 @@ export default function AppLayout() {
           <Stack.Screen
             name="checkout"
             options={{
-              title: 'Çorba Kodu',
+              title: 'Pizza Kodu',
               header: () => <Header />,
             }}
           />
@@ -100,12 +100,10 @@ const styles = StyleSheet.create({
   },
   appContainer: {
     flex: 1,
-    maxWidth: 480,            // tablet / büyük ekranda ortalanmış dar alan
+    maxWidth: 480,           
     width: '90%',
     alignSelf: 'center',
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
-    overflow: 'hidden',       // köşeler düzgün görünsün
   },
   loaderRoot: {
     flex: 1,

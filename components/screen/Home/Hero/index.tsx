@@ -7,7 +7,6 @@ export default function Hero({
   style,
   onPress,
 }: HeroModel) {
-  const height = style?.height ?? 200;
 
   return (
     <Pressable
@@ -16,7 +15,7 @@ export default function Hero({
     >
       <ImageBackground
         source={image}
-        style={{zIndex:100000,height:130}}
+        style={{zIndex:100000,width:420,height:210,position:"relative"}}
         resizeMode='contain'
         borderRadius={10}
       />

@@ -1,18 +1,18 @@
 [
   {
     "id": "cmp-1",
-    "title": "Sebze Çorbalarında",
+    "title": "Sebze Pizzalarında",
     "discountText": "%20 İndirim",
-    "description": "Tüm sebze çorbası çeşitlerinde geçerli özel %20 indirim fırsatı.",
+    "description": "Tüm sebze Pizzası çeşitlerinde geçerli özel %20 indirim fırsatı.",
     "code": "VEG20",
     "expiresAt": "2025-11-20",
     "image": "campaign1.jpg"
   },
   {
     "id": "cmp-2",
-    "title": "Etli Çorbalarda",
+    "title": "Etli Pizzalarda",
     "discountText": "%15 İndirim",
-    "description": "Etli çorba çeşitlerinde geçerli %15 indirim fırsatı.",
+    "description": "Etli Pizza çeşitlerinde geçerli %15 indirim fırsatı.",
     "code": "MEAT15",
     "expiresAt": "2025-10-15",
     "image": "campaign2.jpg"
