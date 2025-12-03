@@ -6,12 +6,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
 import { AppText } from '../ui/AppText';
-
+import { Images } from '@/assets';
 type BackProps = {
   showBack?: boolean;
   backLabel?: string;
@@ -41,7 +42,7 @@ export default function ScreenContainer({
 
       <View style={[s.header, { backgroundColor: colors.primaryDark,display:'flex',justifyContent:'center',alignItems:'center' }]}>
         {header}
-        <AppText color='white' align='center'  size={25} weight='bold' >Soupana</AppText>
+        <Image source={Images.Logo} style={{width:100,height:100}} resizeMode='contain'/> 
       </View>
 
       <View style={[s.sheet, { backgroundColor: colors.borderDark }]}>
@@ -77,7 +78,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
   },
   sheet: {
-    flex: 4,
+    flex: 6,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 16,

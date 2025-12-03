@@ -4,7 +4,7 @@ import { useMeQuery } from '@/redux/api/auth.api';
 import { useAppSelector } from '@/redux/hooks';
 import { Redirect, Stack, usePathname } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 
 export default function AppLayout() {
   const token = useAppSelector((s) => s.session.accessToken);

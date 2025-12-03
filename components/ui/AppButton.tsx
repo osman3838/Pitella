@@ -57,8 +57,8 @@ export const AppButton = memo((props: Props) => {
 
     const palette: Record<ButtonVariant, { bg: string; border: string; defaultLabel: string }> = {
       primary: {
-        bg: t.colors.primary,
-        border: t.colors.primary,
+        bg: t.colors.primaryDark,
+        border: t.colors.primaryDark,
         defaultLabel: t.colors.onPrimary ?? '#fff',
       },
       secondary: {

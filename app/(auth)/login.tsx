@@ -4,7 +4,6 @@ import { Link } from 'expo-router';
 import React, { useRef } from 'react';
 import { Controller, FormProvider } from 'react-hook-form';
 import {
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
-import {Images} from "@/assets/index"
+import { Images } from '@/assets/index';
 import { FormTextInput } from '@/components/form/FormTextInput';
 import { AppButton } from '@/components/ui/AppButton';
 import { AppText } from '@/components/ui/AppText';
@@ -30,17 +29,14 @@ import { useLoginMutation } from '@/redux/api/auth.api';
 import { useAppSelector } from '@/redux/hooks';
 import { LoginForm, loginSchema } from '@/validation/schemas/login.schema';
 
-const { height } = Dimensions.get('window');
-
 export default function Login() {
   const t = useTheme();
   const s = useStyles(t);
   const token = useAppSelector((s) => s.session);
   console.log(token);
 
-
   const [loginReq, { isLoading }] = useLoginMutation();
-  
+
   const form = useZodForm<LoginForm>(loginSchema, {
     defaultValues: {
       email_or_phone: '',
@@ -50,11 +46,10 @@ export default function Login() {
   });
 
   const {
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors },
     clearErrors,
   } = form;
 
-  // Focus zinciri
   const passwordRef = useRef<TextInput>(null);
   const invalid = useInvalidSubmit<LoginForm>();
 
@@ -62,7 +57,7 @@ export default function Login() {
     invalid(errors, {
       password: passwordRef.current,
     });
-""
+
   const onValid = async (data: LoginForm) => {
     clearErrors();
     try {
@@ -92,152 +87,203 @@ export default function Login() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}
     >
-      <ScrollView
-        bounces={false}
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* HEADER */}
-        <View style={s.header}>
-          <View style={s.headerInner}>
-            <Image
-              source={Images.Home.Cover}
-              contentFit=''
-              style={{width:380,height:250}}
-            />
-           
-          </View>
-        </View>
-
-        {/* CARD */}
-        <View style={s.card}>
-          <View style={{paddingTop:20,paddingHorizontal:20}}> 
-          <AppText weight="bold" size={24}  color={t.colors.text} style={s.title}>
-            Giriş Yap
-          </AppText>
-
-          <FormProvider {...form}>
-            <View style={{ marginTop:20, gap: 12 }}>
-              {/* Email/Phone */}
-              <Controller
-                control={form.control}
-                name="email_or_phone"
-                render={({ field: { value, onChange, onBlur } }) => (
-                  <>
-                    <FormTextInput
-                      placeholder="Email yada Telefon"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      returnKeyType="next"
-                      autoCapitalize="none"
-                      containerStyle={{ borderRadius: 99 }}
-                      leftAdornment={
-                     <Icon color={t.colors.surface} size={20} name='User'/>
-                      }
-                      onSubmitEditing={() => passwordRef.current?.focus()}
-                    />
-                    {errors.email_or_phone && (
-                      <Text style={[s.err, { color: t.colors.danger }]}>
-                        {errors.email_or_phone.message}
-                      </Text>
-                    )}
-                  </>
-                )}
-              />
-
-              {/* Password */}
-              <Controller
-                control={form.control}
-                name="password"
-                render={({ field: { value, onChange, onBlur } }) => (
-                  <>
-                    <FormTextInput
-                      ref={passwordRef}
-                      placeholder="Parola"
-                      secureTextEntry
-                      enablePasswordToggle
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      returnKeyType="go"
-                      containerStyle={{ borderRadius: 99 }}
-                      leftAdornment={
-                    
-                        <Icon size={18}  color={t.colors.surface} name='Lock'/>
-                      }
-                      onSubmitEditing={submit}
-                    />
-                    {errors.password && (
-                      <Text style={[s.err, { color: t.colors.danger }]}>
-                        {errors.password.message}
-                      </Text>
-                    )}
-                  </>
-                )}
+      <View style={{ flex: 1, backgroundColor: t.colors.primaryDark }}>
+        <ScrollView
+          bounces={false}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* HEADER */}
+          <View style={s.header}>
+            <View style={s.headerInner}>
+              <Image
+                source={Images.Home.Cover}
+                contentFit="contain"
+                style={{ width: 370, height: 340, marginTop: -10 }}
               />
             </View>
-          </FormProvider>
+            <View style={{position:"absolute",bottom:-42,right:40}}>
 
-          {/* Forgot password */}
-          <View style={s.forgotRow}>
-            <Link href="/(auth)/forgot" asChild>
+  <Image contentFit='contain' source={Images.Login.Background03} style={{width: 100, height: 90}}/>
+</View>
+          </View>
+
+          {/* CARD */}
+          <View style={s.card}>
+<View style={{position:"absolute",bottom:100,left:10}}>
+
+  <Image contentFit='contain' source={Images.Login.Background01} style={{width: 80, height: 110}}/>
+</View>
+<View style={{position:"absolute",bottom:0,right:-8}}>
+
+  <Image contentFit='contain' source={Images.Login.Background02} style={{width: 70, height: 90}}/>
+</View>
+
+            <View style={{ paddingTop: 30, paddingHorizontal: 20 }}>
               <AppText
-                weight="regular"
-                size={14}
-                color={t.colors.mutedText}
-                style={{ textDecorationLine: 'none' }}
+                weight="bold"
+                size={24}
+                color={t.colors.text}
+                style={s.title}
               >
-                Şifremi Unuttum
+                Giriş Yap
               </AppText>
-            </Link>
-          </View>
 
-          {/* Button */}
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <AppButton
-              block
-              round
-              variant="primary"
-              style={{ width: '60%', borderRadius: 30,marginTop:15 }}
-              onPress={submit}
-              loading={isLoading}
-            >
-              <AppText size={25} weight="bold"  color="#fff">Giriş Yap</AppText>
-            </AppButton>
-          </View>
+              <FormProvider {...form}>
+                <View style={{ marginTop: 20, gap: 12 }}>
+                  {/* Email/Phone */}
+                  <Controller
+                    control={form.control}
+                    name="email_or_phone"
+                    render={({ field: { value, onChange, onBlur } }) => (
+                      <>
+                        <FormTextInput
+                          placeholder="Email yada Telefon"
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          returnKeyType="next"
+                          autoCapitalize="none"
+                          containerStyle={{ borderRadius: 99 }}
+                          leftAdornment={
+                            <Icon
+                              color={t.colors.surface}
+                              size={20}
+                              name="User"
+                            />
+                          }
+                          onSubmitEditing={() => passwordRef.current?.focus()}
+                        />
+                        {errors.email_or_phone && (
+                          <Text style={[s.err, { color: t.colors.danger }]}>
+                            {errors.email_or_phone.message}
+                          </Text>
+                        )}
+                      </>
+                    )}
+                  />
 
-          {/* Social */}
-          <View style={s.otherTitleWrap}>
-            <AppText weight="regular" size={14} color={t.colors.mutedText}>
-              Diğer giriş seçenekleri
-            </AppText>
-          </View>
+                  {/* Password */}
+                  <Controller
+                    control={form.control}
+                    name="password"
+                    render={({ field: { value, onChange, onBlur } }) => (
+                      <>
+                        <FormTextInput
+                          ref={passwordRef}
+                          placeholder="Parola"
+                          secureTextEntry
+                          enablePasswordToggle
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          returnKeyType="go"
+                          containerStyle={{ borderRadius: 99 }}
+                          leftAdornment={
+                            <Icon
+                              size={18}
+                              color={t.colors.surface}
+                              name="Lock"
+                            />
+                          }
+                          onSubmitEditing={submit}
+                        />
+                        {errors.password && (
+                          <Text style={[s.err, { color: t.colors.danger }]}>
+                            {errors.password.message}
+                          </Text>
+                        )}
+                      </>
+                    )}
+                  />
+                </View>
+              </FormProvider>
 
-          <View style={s.socialRow}>
-            <IconButton style={{ borderRadius: 7, paddingHorizontal: 30 }} backgroundColor="#fff">
-              <Icon name="Google" size={30} />
-            </IconButton>
+              {/* Forgot password */}
+              <View style={s.forgotRow}>
+                <Link href="/(auth)/forgot" asChild>
+                  <AppText
+                    weight="regular"
+                    size={14}
+                    color={t.colors.mutedText}
+                    style={{ textDecorationLine: 'none' }}
+                  >
+                    Şifremi Unuttum
+                  </AppText>
+                </Link>
+              </View>
 
-            <IconButton style={{ borderRadius: 7, paddingHorizontal: 30 }} backgroundColor="#fff">
-              <Icon name="Apple" size={36} />
-            </IconButton>
-          </View>
+              {/* Button */}
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <AppButton
+                  block
+                  round
+                  variant="primary"
+                  style={{
+                    width: '60%',
+                    borderRadius: 20,
+                    marginTop: 15,
+                  }}
+                  onPress={submit}
+                  loading={isLoading}
+                >
+                  <AppText size={25} weight="bold" color="#fff">
+                    Giriş Yap
+                  </AppText>
+                </AppButton>
+              </View>
 
-          {/* Register */}
-          <View style={s.registerRow}>
-            <AppText weight="regular" size={14} color={t.colors.mutedText}>
-              Hesabın yok mu?{' '}
-            </AppText>
-            <Link href="/(auth)/register" asChild>
-              <AppText weight="medium" size={14} color={t.colors.secondary}>
-                Kayıt Ol
-              </AppText>
-            </Link>
+              {/* Social */}
+              <View style={s.otherTitleWrap}>
+                <AppText
+                  weight="regular"
+                  size={14}
+                  color={t.colors.mutedText}
+                >
+                  Diğer giriş seçenekleri
+                </AppText>
+              </View>
+
+              <View style={s.socialRow}>
+                <IconButton
+                  style={{ borderRadius: 7, paddingHorizontal: 30 }}
+                  backgroundColor="#fff"
+                >
+                  <Icon name="Google" size={30} />
+                </IconButton>
+
+                <IconButton
+                  style={{ borderRadius: 7, paddingHorizontal: 30 }}
+                  backgroundColor="#fff"
+                >
+                  <Icon name="Apple" size={36} />
+                </IconButton>
+              </View>
+
+              {/* Register */}
+              <View style={s.registerRow}>
+                <AppText
+                  weight="regular"
+                  size={14}
+                  color={t.colors.mutedText}
+                >
+                  Hesabın yok mu?{' '}
+                </AppText>
+                <Link href="/(auth)/register" asChild>
+                  <AppText
+                    weight="medium"
+                    size={14}
+                    color={t.colors.secondary}
+                  >
+                    Kayıt Ol
+                  </AppText>
+                </Link>
+              </View>
+            </View>
           </View>
-           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -245,31 +291,33 @@ export default function Login() {
 const useStyles = (t: ReturnType<typeof useTheme>) =>
   StyleSheet.create({
     header: {
-      backgroundColor: t.colors.primaryDark,
+      flex: 1,
       alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop:60,
-      paddingBottom: 60,
 
+      justifyContent: 'center',
+      zIndex:10,
     },
     headerInner: {
       alignItems: 'center',
+      
       justifyContent: 'center',
+      zIndex:-4,
+    
       gap: 6,
     },
 
     card: {
-      marginTop: -t.radius * 2,
       backgroundColor: t.colors.borderDark,
-      borderTopLeftRadius: t.radius * 1,
-      borderTopRightRadius: t.radius * 1,
-
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      position:"relative",
       padding: t.spacing.xl,
-      minHeight: Math.max(0, height * 1),
+      overflow: 'hidden',
     },
+
     title: {
       lineHeight: 28,
-      marginLeft:8
+      marginLeft: 8,
     },
     forgotRow: {
       alignItems: 'flex-end',
@@ -283,7 +331,7 @@ const useStyles = (t: ReturnType<typeof useTheme>) =>
     },
     socialRow: {
       flexDirection: 'row',
-      gap: t.spacing.lg,
+      gap: t.spacing.sm,
       justifyContent: 'center',
     },
     registerRow: {

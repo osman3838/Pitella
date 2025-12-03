@@ -2,7 +2,7 @@ export function useTheme() {
   return {
     colors: {
       primary: '#f1665d',     
-      secondary: '#ff5833',   
+      secondary: '#ec1c24',   
 
       background: '#ffffff',
       yellow:"#96c03d",  

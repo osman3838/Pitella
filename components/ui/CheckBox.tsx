@@ -28,8 +28,8 @@ export const CheckBox = memo(function CheckBox({
           width: size,
           height: size,
           borderRadius: radius,
-          borderColor: checked ? withAlpha(colors.secondary, 0.0) : colors.border,
-          backgroundColor: withAlpha(colors.secondary, checked ? 0.15 : 0.08),
+          borderColor: checked ? withAlpha(colors.yellow, 0.0) : colors.yellow,
+          backgroundColor: withAlpha(colors.yellow, checked ? 0.15 : 0.08),
           opacity: disabled ? 0.5 : 1,
         },
         style,
@@ -41,7 +41,7 @@ export const CheckBox = memo(function CheckBox({
             width: size * 0.55,
             height: size * 0.55,
             borderRadius: radius * 0.6,
-            backgroundColor: colors.secondary, // turuncu/kırmızımsı
+            backgroundColor: colors.yellow,
           }}
         />
       ) : null}
@@ -53,6 +53,5 @@ const s = StyleSheet.create({
   box: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
   },
 });

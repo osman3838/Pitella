@@ -25,9 +25,9 @@ export const BackButton: React.FC<BackButtonProps> = ({
         onPress={onPress ?? (() => router.back())}
         size={size}
         radius={radius}
-        backgroundColor={withAlpha(colors.secondary, 0.08)}
+        backgroundColor={colors.primary}
       >
-        <Ionicons name="arrow-back-outline" size={20} color={colors.secondary} />
+        <Ionicons name="arrow-back-outline" size={20} color={"white"} />
       </IconButton>
 
       <AppText weight="medium" size={14} style={s.label}>

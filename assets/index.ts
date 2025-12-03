@@ -17,5 +17,18 @@ export const Images = {
     },
 
   },
+  Login:
+  {
+    Background01:require("./images/login/background-01.png"),
+    Background02:require("./images/login/background-02.png"),
+    Background03:require("./images/login/background-03.png"),
+
+  },
+  Register:{
+    Background01:require("./images/register/background-01.png"),
+    Background02:require("./images/register/background-02.png"),
+
+  },
+    Logo:require("./images/common/logo.png"),
 
 } as const;

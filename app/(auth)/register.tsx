@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useRef } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-
 import { FormTextInput } from '@/components/form/FormTextInput';
 import AuthLayout from '@/components/layout/AuthLayout';
 import { AppButton } from '@/components/ui/AppButton';
@@ -20,6 +19,8 @@ import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { useZodForm } from '@/hooks/useZodForm';
 import { applyServerErrors, focusFirstError } from '@/utils/forms/errors';
 import type { ServerErrors } from '@/utils/forms/types';
+import { Image } from 'expo-image';
+import {Images} from "@/assets"
 
 export default function Register() {
   const { colors } = useTheme();
@@ -124,10 +125,17 @@ export default function Register() {
         </AppText>
       }
     >
-      <View style={{ gap: 12 }}>
+      <View style={{ gap: 12,position:"relative",zIndex:-1 }}>
+        <View style={{position:"absolute",top:-130,right:-10,zIndex:8982}}>
+          <Image source={Images.Register.Background01}  contentFit='contain' style={{width:100,height:100}}/>
+        </View>
+           <View style={{position:"absolute",bottom:35,right:0}}>
+          <Image source={Images.Register.Background02}  contentFit='contain' style={{width:50,height:50}}/>
+        </View>
         <Controller
           control={control}
           name="name"
+        
           render={({ field: { value, onChange, onBlur } }) => (
             <>
               <FormTextInput
@@ -290,13 +298,13 @@ export default function Register() {
         />
         {errors.contract && <Text style={[s.err, { color: colors.danger }]}>{String(errors.contract.message)}</Text>}
 
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' ,marginTop:40}}>
                    <AppButton
                      block
                      round
                      align='center'
                      variant="secondary"
-                     style={{ width: '60%', borderRadius: 30 }}
+                     style={{ width: '60%', borderRadius: 15 }}
                      onPress={submit}
                      loading={isLoading}
                    >
