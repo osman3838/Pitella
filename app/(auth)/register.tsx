@@ -21,6 +21,7 @@ import { applyServerErrors, focusFirstError } from '@/utils/forms/errors';
 import type { ServerErrors } from '@/utils/forms/types';
 import { Image } from 'expo-image';
 import {Images} from "@/assets"
+import Icon from '@/icons';
 
 export default function Register() {
   const { colors } = useTheme();
@@ -146,7 +147,7 @@ export default function Register() {
                 onBlur={onBlur}
                 returnKeyType="next"
                 onSubmitEditing={() => surnameRef.current?.focus()}
-                leftAdornment={<Ionicons name="person-outline" size={20} color={colors.mutedText} />}
+                leftAdornment={<Icon name="User" size={20} color={colors.surface} />}
               />
               {errors.name && <Text style={[s.err, { color: colors.danger }]}>{errors.name.message}</Text>}
             </>
@@ -167,7 +168,7 @@ export default function Register() {
                 onBlur={onBlur}
                 returnKeyType="next"
                 onSubmitEditing={() => phoneRef.current?.focus()}
-                leftAdornment={<Ionicons name="person-outline" size={20} color={colors.mutedText} />}
+                leftAdornment={<Icon name="User" size={20} color={colors.surface} />}
               />
               {errors.surname && <Text style={[s.err, { color: colors.danger }]}>{errors.surname.message}</Text>}
             </>
@@ -187,9 +188,10 @@ export default function Register() {
                 value={value ?? ''}
                 onChangeText={onChange}
                 onBlur={onBlur}
+
                 returnKeyType="next"
                 onSubmitEditing={() => emailRef.current?.focus()}
-                leftAdornment={<Ionicons name="call-outline" size={20} color={colors.mutedText} />}
+                leftAdornment={<Icon name="Phone" size={20} color={colors.mutedText} />}
               />
               {errors.phone && <Text style={[s.err, { color: colors.danger }]}>{errors.phone.message}</Text>}
             </>
@@ -212,7 +214,7 @@ export default function Register() {
                 onBlur={onBlur}
                 returnKeyType="next"
                 onSubmitEditing={() => passwordRef.current?.focus()}
-                leftAdornment={<Ionicons name="mail-outline" size={20} color={colors.mutedText} />}
+                leftAdornment={<Icon name="Mail" size={20} color={colors.mutedText} />}
               />
               {errors.email && <Text style={[s.err, { color: colors.danger }]}>{errors.email.message}</Text>}
             </>
@@ -235,7 +237,7 @@ export default function Register() {
                 onBlur={onBlur}
                 returnKeyType="next"
                 onSubmitEditing={() => confirmRef.current?.focus()}
-                leftAdornment={<Ionicons name="lock-closed-outline" size={20} color={colors.mutedText} />}
+                leftAdornment={<Icon name="Lock" size={20} color={colors.surface} />}
               />
               {errors.password && <Text style={[s.err, { color: colors.danger }]}>{errors.password.message}</Text>}
             </>
@@ -258,7 +260,7 @@ export default function Register() {
                 onBlur={onBlur}
                 returnKeyType="done"
                 onSubmitEditing={submit}
-                leftAdornment={<Ionicons name="lock-closed-outline" size={20} color={colors.mutedText} />}
+                leftAdornment={<Icon name="Lock" size={20} color={colors.surface} />}
               />
               {errors.confirm && <Text style={[s.err, { color: colors.danger }]}>{errors.confirm.message}</Text>}
             </>

@@ -9,6 +9,8 @@ import { Controller } from 'react-hook-form';
 import { Keyboard, StyleSheet, Text, TextInput, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
+import { Image } from 'expo-image';
+import {Images} from "@/assets"
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { useTheme } from '@/hooks/useTheme';
 import { useZodForm } from '@/hooks/useZodForm';
@@ -18,6 +20,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordForm,
 } from '@/validation/schemas';
+import Icon from '@/icons';
 
 // RTK yok: sahte istek
 function mockForgotPassword(identifier: string) {
@@ -94,7 +97,7 @@ export default function ForgotPassword() {
       setLoading(false);
     }
   };
-
+  const t = useTheme();
   const { submit } = useFormSubmit(form, { onValid, onInvalid });
   const canSubmit = isValid && !isSubmitting && !loading;
 
@@ -113,10 +116,17 @@ export default function ForgotPassword() {
         </AppText>
       }
     >
-      <View style={{ gap: 16 }}>
+      <View style={{ alignItems: 'center',position:"absolute",top:40,width:50,height:50,right:30,zIndex:1555}}>
+        <Image source={Images.FindMail.Background01} contentFit='contain' style={{width: "100%", height: "100%"}}/>
+        </View>
+              <View style={{ alignItems: 'center',position:"absolute",bottom:30,width:70,height:70,left:15,zIndex:1555}}>
+        <Image source={Images.FindMail.Background02} contentFit='contain' style={{width: "100%", height: "100%"}}/>
+        </View>
+      <View style={{ gap: 16}}>
         {/* Geri butonu */}
-       
-
+   
+   
+        
         {/* Üst blok */}
         <View style={s.header}>
  
@@ -148,10 +158,10 @@ export default function ForgotPassword() {
                 returnKeyType="send"
                 onSubmitEditing={submit}
                 leftAdornment={
-                  <Ionicons
-                    name="person-circle-outline"
+                  <Icon
+                    name="User"
                     size={20}
-                    color={colors.mutedText}
+                              color={t.colors.surface}
                   />
                 }
                 autoCapitalize="none"
@@ -171,13 +181,14 @@ export default function ForgotPassword() {
           )}
         />
 
+
         {/* Gönder */}
-        <View style={{ marginTop: 8,display:"flex",alignItems:"center" }}>
+        <View style={{ marginTop: 20,display:"flex",alignItems:"center" }}>
           <AppButton
             block
             round 
             variant="secondary"
-                          style={{ width: '60%', borderRadius: 30 }}
+                          style={{ width: '60%', borderRadius: 15 }}
 
             disabled={!canSubmit}
             loading={loading}
@@ -197,7 +208,7 @@ const s = StyleSheet.create({
   header: {
     alignItems: 'center',
     gap: 4,
-    marginTop: 4,
+    marginTop: 60,
     marginBottom: 8,
   },
   avatar: {

@@ -11,6 +11,7 @@ import {
   TextInput,
   TextInputKeyPressEventData,
   View,
+  useWindowDimensions,
 } from 'react-native';
 
 import type { OTPInputProps, OTPInputRef } from '@/types';
@@ -44,6 +45,17 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
     [value, internal],
   );
 
+  const { width: screenWidth } = useWindowDimensions();
+
+  // ScreenContainer içindeki padding'leri hesaba katıp,
+  // satırın güvenli maksimum genişliğini hesapla
+  const maxRowWidth = screenWidth - 80; // 2x padding + biraz nefes payı
+  const totalGap = gap * (length - 1);
+  const computedBoxWidth = Math.min(
+    58, // büyük ekranda taşmasın diye üst limit
+    (maxRowWidth - totalGap) / length,
+  );
+
   const setAt = (idx: number, ch: string) => {
     if (value != null) {
       const next = code.split('');
@@ -51,8 +63,6 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
       const joined = next.join('').slice(0, length);
 
       onChangeText?.(joined);
-
-      // tüm slotlar doluysa complete
       if (joined.length === length && allFilled(next)) {
         onComplete?.(joined);
       }
@@ -72,7 +82,6 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
   };
 
   const distribute = (idx: number, text: string) => {
-    // 🔹 SİLME DURUMU: kullanıcı backspace ile bu inputu boşalttı
     if (text === '') {
       setAt(idx, '');
       return;
@@ -80,7 +89,6 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
 
     const chars = text.replace(/\s+/g, '').split('');
 
-    // tek karakter girilmişse
     if (chars.length <= 1) {
       if (!chars[0]) return;
       setAt(idx, chars[0]);
@@ -88,7 +96,6 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
       return;
     }
 
-    // paste / çoklu giriş
     for (let i = 0; i < chars.length && idx + i < length; i++) {
       setAt(idx + i, chars[i]);
     }
@@ -103,13 +110,11 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
     if (e.nativeEvent.key === 'Backspace') {
       const current = (value != null ? code[idx] : internal[idx]) ?? '';
 
-      // slot dolu ise sadece bu slotu temizle
       if (current) {
         setAt(idx, '');
         return;
       }
 
-      // zaten boşsa bir önceki inputa fokus
       if (idx > 0) inputs.current[idx - 1]?.focus();
     }
   };
@@ -127,7 +132,13 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
   }));
 
   return (
-    <View style={[styles.row, { columnGap: gap }, containerStyle]}>
+    <View
+      style={[
+        styles.row,
+        { columnGap: gap },
+        containerStyle,
+      ]}
+    >
       {Array.from({ length }).map((_, idx) => {
         const char = value != null ? value[idx] ?? '' : internal[idx];
         return (
@@ -144,7 +155,11 @@ export const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(function OTPInput
             maxLength={1}
             autoFocus={autoFocus && idx === 0}
             textContentType="oneTimeCode"
-            style={[styles.box, boxStyle]}
+            style={[
+              styles.box,
+              boxStyle,
+              { width: computedBoxWidth },
+            ]}
             secureTextEntry={secure}
             selectionColor="transparent"
           />
@@ -158,15 +173,22 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'stretch',
   },
   box: {
-    width: 58,
-    height: 56,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    backgroundColor: '#fff',
-    fontSize: 22,
+    height: 72,
+    borderRadius: 18,
+    borderWidth: 0,
+    backgroundColor: '#FFFFFF',
+    textAlignVertical: 'center',
+    fontSize: 32,
     fontWeight: '700',
+    elevation: 4,
+    shadowColor: '#00000022',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
   },
 });
 

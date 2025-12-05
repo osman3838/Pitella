@@ -1,11 +1,15 @@
+import React from 'react';
+import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 import { AppText } from '@/components/ui/AppText';
 import { useTheme } from '@/hooks/useTheme';
 import type { AuthLayoutProps } from '@/types';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import ScreenContainer from '../ScreenContainer';
 import { BackButton } from './BackButton';
+
+type ExtraProps = {
+  edgeContent?: React.ReactNode;
+  contentContainerStyle?: StyleProp<ViewStyle>;
+};
 
 export default function AuthLayout({
   title,
@@ -15,7 +19,9 @@ export default function AuthLayout({
   children,
   footer,
   cta,
-}: AuthLayoutProps) {
+  edgeContent,
+  contentContainerStyle,
+}: AuthLayoutProps & ExtraProps) {
   const { colors } = useTheme();
 
   return (
@@ -23,20 +29,14 @@ export default function AuthLayout({
       header={hero ? <View style={s.hero}>{hero}</View> : null}
       footer={footer}
       cta={cta}
-      contentContainerStyle={s.contentGap}
+      edgeContent={edgeContent}
+      contentContainerStyle={[s.contentGap, contentContainerStyle]}
     >
-      
-
-      {showBack && (
-        <BackButton  />
-      )}
-
-
+      {showBack && <BackButton />}
 
       {!!title && (
         <AppText
           weight="bold"
-          
           size={28}
           color={colors.text}
           style={s.title}
@@ -58,24 +58,24 @@ export default function AuthLayout({
       )}
 
       {children}
-
     </ScreenContainer>
   );
 }
 
 const s = StyleSheet.create({
-  hero: { alignItems: 'center', paddingVertical: 24 },
-  contentGap: { paddingTop: 12, rowGap: 14 },
-  backRow: { flexDirection: 'row', alignItems: 'center' },
-  backCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  hero: {
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 24,
   },
-  backText: { marginLeft: 8 },
-  avatarWrap: { alignItems: 'center' },
-  title: { marginTop: 12,marginLeft:10 },
-  subtitle: { marginTop: 6 },
+  contentGap: {
+    paddingTop: 12,
+    rowGap: 14,
+  },
+  title: {
+    marginTop: 12,
+    marginLeft: 10,
+  },
+  subtitle: {
+    marginTop: 6,
+  },
 });

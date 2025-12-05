@@ -253,12 +253,19 @@ export default function Login() {
                   <Icon name="Google" size={30} />
                 </IconButton>
 
+{
+Platform.OS == "ios" && 
+
+
                 <IconButton
                   style={{ borderRadius: 7, paddingHorizontal: 30 }}
                   backgroundColor="#fff"
                 >
+
+
                   <Icon name="Apple" size={36} />
                 </IconButton>
+}
               </View>
 
               {/* Register */}

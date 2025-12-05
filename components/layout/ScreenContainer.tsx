@@ -11,15 +11,21 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { AppText } from '../ui/AppText';
 import { Images } from '@/assets';
+
 type BackProps = {
   showBack?: boolean;
   backLabel?: string;
   onBack?: () => void;
 };
 
-type Props = ScreenContainerProps & BackProps;
+type Props = ScreenContainerProps &
+  BackProps & {
+    /**
+     * sheet alanında, padding'den etkilenmeyen, istersen absolute verebileceğin slot
+     */
+    edgeContent?: React.ReactNode;
+  };
 
 export default function ScreenContainer({
   header,
@@ -31,28 +37,56 @@ export default function ScreenContainer({
   showBack = false,
   backLabel = 'Geri Dön',
   onBack,
+  edgeContent,
 }: Props) {
   const { colors } = useTheme();
   const router = useRouter();
 
   return (
-    <View style={[s.safe, { backgroundColor: colors.primaryDark }]} testID={testID}>
+    <View
+      style={[s.safe, { backgroundColor: colors.primaryDark }]}
+      testID={testID}
+    >
       <StatusBar barStyle="light-content" />
-      
 
-      <View style={[s.header, { backgroundColor: colors.primaryDark,display:'flex',justifyContent:'center',alignItems:'center' }]}>
+      <View
+        style={[
+          s.header,
+          {
+            backgroundColor: colors.primaryDark,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        ]}
+      >
         {header}
-        <Image source={Images.Logo} style={{width:100,height:100}} resizeMode='contain'/> 
+        <Image
+          source={Images.Logo}
+          style={{ width: 100, height: 100 }}
+          resizeMode="contain"
+        />
       </View>
 
-      <View style={[s.sheet, { backgroundColor: colors.borderDark }]}>
+      <View
+        style={[
+          s.sheet,
+          { backgroundColor: colors.borderDark },
+        ]}
+      >
+        {/* Dekor/overlay slotu */}
+        {edgeContent && <View style={s.edgeWrap}>{edgeContent}</View>}
+
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
           style={{ flex: 1 }}
         >
           <ScrollView
-            contentContainerStyle={[s.content, contentContainerStyle]}
+            contentContainerStyle={[
+              s.content,
+              s.contentInner,
+              contentContainerStyle,
+            ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             bounces={false}
@@ -65,8 +99,6 @@ export default function ScreenContainer({
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
-
-
     </View>
   );
 }
@@ -81,12 +113,23 @@ const s = StyleSheet.create({
     flex: 6,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    paddingTop: 16,
-    paddingHorizontal: 54,
+    marginTop: 16,
+    overflow: 'visible',
+    position: 'relative',
+  },
+  // overlay alanı (sheet referanslı)
+  edgeWrap: {
+    position: 'absolute',
+    top: -40, // kırmızı alanla kesişsin istiyorsan burayı oynarsın
+    right: 24,
+    zIndex: 10,
   },
   content: {
     paddingTop: 8,
     flexGrow: 1,
+  },
+  contentInner: {
+    paddingHorizontal: 54,
   },
   footer: { marginTop: 16 },
   ctaWrap: {

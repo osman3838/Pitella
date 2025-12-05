@@ -29,6 +29,17 @@ export const Images = {
     Background02:require("./images/register/background-02.png"),
 
   },
+  SendCode: 
+  {
+    Background01:require("./images/sendcode/background-01.png"),
+    Background02:require("./images/sendcode/background-02.png"),
+  },
+  FindMail:{
+
+    Background01:require("./images/findmail/background-01.png"),
+    Background02:require("./images/findmail/background-02.png"),
+
+  },
     Logo:require("./images/common/logo.png"),
 
 } as const;
