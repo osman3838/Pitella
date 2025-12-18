@@ -29,6 +29,20 @@ export const Images = {
     Background02:require("./images/register/background-02.png"),
 
   },
+  Campaings:
+  {
+    Background01:require("./images/campaings/background-01.png"),
+    Background02:require("./images/campaings/background-02.png"),
+
+
+
+  },
+  Profile:
+  {
+    Background01:require("./images/profile/background.png"),
+    Background02:require("./images/profile/background-02.png"),
+
+  },
   SendCode: 
   {
     Background01:require("./images/sendcode/background-01.png"),

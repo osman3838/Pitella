@@ -41,20 +41,7 @@ export default function PayScreen() {
         </View>
 
         {/* Alt kısım scroll edilebilir kontroller */}
-        <ScrollView
-          style={s.controlsScroll}
-          contentContainerStyle={s.controlsContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <ScanControls
-            state={state}
-            hasPermission={hasPermission}
-            onOpenScanner={openScanner}
-            onRequestPermission={requestAgain}
-            torchEnabled={torchEnabled}
-            onToggleTorch={toggleTorch}
-          />
-        </ScrollView>
+ 
       </View>
 
       {/* QR AÇIKKEN: EKRANI %100 KAPLAYAN OVERLAY */}

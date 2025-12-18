@@ -1,12 +1,16 @@
 import CampaignsScreen from '@/components/screen/Campaign/CampaignsScreen';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View,Image } from 'react-native';
+import {Images} from '@/assets';
+
 export default function campaigns() {
   
 
 
   return (
     <View style={styles.screen}>
+   
+     
       <CampaignsScreen/>
     </View>
   );
@@ -15,6 +19,8 @@ export default function campaigns() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    position:"relative",
+
     backgroundColor: '#F5F5F5',
   },
 });

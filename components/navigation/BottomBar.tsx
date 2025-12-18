@@ -17,12 +17,18 @@ export default function BottomBar({ state, descriptors, navigation }: BottomTabB
   return (
     <View style={[s.wrap, { paddingBottom: insets.bottom }]}>
       <View style={s.bar}>
-        {/* SOL ALT RESİM */}
+        {
+          pathname == "home" &&
+          (
         <Image
           source={Images.Home.BottomBar.Cover}
           style={s.leftImage}
           resizeMode="contain"
         />
+
+          )
+
+}
 
         <Link href="/(app)/home" asChild>
           <Pressable style={s.item}>
@@ -90,6 +96,8 @@ const s = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
+    marginHorizontal:15,
+    
     bottom: 0,
     alignItems: 'center',
     pointerEvents: 'box-none',
@@ -115,7 +123,7 @@ const s = StyleSheet.create({
   leftImage: {
     position: 'absolute',
     left: -25,
-    bottom: -30,
+    bottom: -10,
     width: 70,
     height: 70,
     zIndex: 0,

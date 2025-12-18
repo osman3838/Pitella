@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     maxWidth: 480,           
-    width: '90%',
+    width: '100%',
     alignSelf: 'center',
     borderRadius: 24,
   },

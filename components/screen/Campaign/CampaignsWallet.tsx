@@ -50,6 +50,8 @@ export default function CampaignsWallet({
 const s = StyleSheet.create({
   container: {
     marginBottom: 24,
+    marginHorizontal:15,
+
   },
   card: {
     borderRadius: 18,

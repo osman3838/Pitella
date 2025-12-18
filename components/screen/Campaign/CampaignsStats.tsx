@@ -45,6 +45,8 @@ const s = StyleSheet.create({
   container: {
     marginTop: 8,
     marginBottom: 24,
+    marginHorizontal:15,
+
   },
   labelRow: {
     flexDirection: 'row',

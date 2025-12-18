@@ -27,6 +27,7 @@ export const CampaignSection = memo(CampaignSectionComponent);
 const styles = StyleSheet.create({
   container: {
     paddingTop: 8,
+    marginHorizontal:15,
     paddingBottom: 16,
   },
 });

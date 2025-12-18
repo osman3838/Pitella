@@ -57,6 +57,8 @@ const s = StyleSheet.create({
   container: {
     marginBottom: 24,
     marginTop:24,
+    marginHorizontal:15,
+
   },
   title: {
     marginBottom: 12,

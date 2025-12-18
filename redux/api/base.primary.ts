@@ -13,16 +13,13 @@ const rawBase = fetchBaseQuery({
     headers.set('Content-Type', 'application/json');
     return headers;
   },
-  // Çerez gerekliyse 'include' yaparsın. Bearer kullanıyorsun, o yüzden 'omit' iyi.
   credentials: 'omit',
 });
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
   async (args, api, extraOptions) => {
-    // 1) İlk istek
     let result = await rawBase(args, api, extraOptions);
 
-    // 2) 401 → refresh dene
     if (result.error?.status === 401) {
       const state = api.getState() as RootState;
       const refresh = state.session.refreshToken;
@@ -50,7 +47,6 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
             refreshToken: d.refresh_token ?? refresh,
           })
         );
-        // 3) Orijinal isteği yeni token ile tekrar et
         result = await rawBase(args, api, extraOptions);
       } else {
         api.dispatch(signOut());
